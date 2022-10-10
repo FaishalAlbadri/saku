@@ -4,7 +4,7 @@ import android.content.SharedPreferences
 import android.content.Intent
 import android.app.Activity
 import android.content.Context
-import com.faishal.saku.ui.LoginActivity
+import com.faishal.saku.ui.login.LoginActivity
 import java.util.HashMap
 
 class SessionManager{

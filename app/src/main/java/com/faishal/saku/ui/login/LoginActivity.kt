@@ -1,15 +1,10 @@
-package com.faishal.saku.ui
+package com.faishal.saku.ui.login
 
 import android.app.ProgressDialog
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.text.Html
-import android.text.SpannableString
-import android.text.Spanned
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
-import android.util.Log
 import android.widget.*
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -19,6 +14,8 @@ import com.faishal.saku.base.BaseFullScreenActivity
 import com.faishal.saku.di.LoginRepositoryInject
 import com.faishal.saku.presenter.login.LoginContract
 import com.faishal.saku.presenter.login.LoginPresenter
+import com.faishal.saku.ui.home.HomeActivity
+import com.faishal.saku.ui.register.RegisterActivity
 import com.faishal.saku.util.SessionManager
 import com.faishal.saku.util.Util
 import com.rengwuxian.materialedittext.MaterialEditText

@@ -8,9 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -19,9 +17,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.faishal.saku.R
 import com.faishal.saku.api.Server
 import com.faishal.saku.data.news.NewsItem
-import com.faishal.saku.ui.BeritaActivity
-import com.faishal.saku.ui.BeritaDetailActivity
-import com.faishal.saku.ui.LoginActivity
+import com.faishal.saku.ui.berita.BeritaActivity
+import com.faishal.saku.ui.berita.BeritaDetailActivity
 import org.jetbrains.annotations.NotNull
 
 class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ViewHolder> {

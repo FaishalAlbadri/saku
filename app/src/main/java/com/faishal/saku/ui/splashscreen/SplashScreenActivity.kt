@@ -1,21 +1,13 @@
-package com.faishal.saku.ui
+package com.faishal.saku.ui.splashscreen
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.Window
-import android.view.WindowInsets
-import android.view.WindowManager
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatDelegate
 import com.faishal.saku.R
-import com.faishal.saku.base.BaseActivity
 import com.faishal.saku.base.BaseFullScreenActivity
-import com.faishal.saku.di.LoginRepositoryInject
-import com.faishal.saku.presenter.login.LoginContract
-import com.faishal.saku.presenter.login.LoginPresenter
+import com.faishal.saku.ui.home.HomeActivity
+import com.faishal.saku.ui.login.LoginActivity
 import com.faishal.saku.util.SessionManager
 
 class SplashScreenActivity : BaseFullScreenActivity() {

@@ -1,4 +1,4 @@
-package com.faishal.saku.ui
+package com.faishal.saku.ui.berita
 
 import android.app.ProgressDialog
 import androidx.appcompat.app.AppCompatActivity

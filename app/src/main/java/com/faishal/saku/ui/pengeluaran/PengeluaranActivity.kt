@@ -1,4 +1,4 @@
-package com.faishal.saku.ui
+package com.faishal.saku.ui.pengeluaran
 
 import android.os.Bundle
 import com.faishal.saku.R

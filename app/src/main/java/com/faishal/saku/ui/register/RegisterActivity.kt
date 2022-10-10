@@ -1,11 +1,9 @@
-package com.faishal.saku.ui
+package com.faishal.saku.ui.register
 
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
-import android.text.Html.fromHtml
 import android.widget.Button
-import android.widget.CheckBox
 import android.widget.TextView
 import android.widget.Toast
 import butterknife.BindView
@@ -16,6 +14,7 @@ import com.faishal.saku.base.BaseFullScreenActivity
 import com.faishal.saku.di.RegisterRepositoryInject
 import com.faishal.saku.presenter.register.RegisterContract
 import com.faishal.saku.presenter.register.RegisterPresenter
+import com.faishal.saku.ui.login.LoginActivity
 import com.faishal.saku.util.Util
 import com.rengwuxian.materialedittext.MaterialEditText
 

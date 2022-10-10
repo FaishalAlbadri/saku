@@ -1,4 +1,4 @@
-package com.faishal.saku.ui
+package com.faishal.saku.ui.home
 
 import android.app.ProgressDialog
 import android.content.Intent

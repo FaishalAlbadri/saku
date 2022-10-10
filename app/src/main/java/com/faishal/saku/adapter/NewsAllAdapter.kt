@@ -16,7 +16,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.faishal.saku.R
 import com.faishal.saku.api.Server
 import com.faishal.saku.data.news.NewsItem
-import com.faishal.saku.ui.BeritaDetailActivity
+import com.faishal.saku.ui.berita.BeritaDetailActivity
 import org.jetbrains.annotations.NotNull
 
 
