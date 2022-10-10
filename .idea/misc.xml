@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="app/src/main/res/drawable/bg_button_primary.xml" value="0.3508804321289063" />
+        <entry key="app/src/main/res/drawable/bg_toolbar.xml" value="0.28249969482421877" />
+        <entry key="app/src/main/res/drawable/card_10_okt.xml" value="0.155" />
+        <entry key="app/src/main/res/drawable/card_11_nov.xml" value="0.155" />
+        <entry key="app/src/main/res/drawable/card_12_des.xml" value="0.155" />
+        <entry key="app/src/main/res/drawable/card_1_jan.xml" value="0.295" />
+        <entry key="app/src/main/res/drawable/card_2_feb.xml" value="0.295" />
+        <entry key="app/src/main/res/drawable/card_3_mar.xml" value="0.19957275390624996" />
+        <entry key="app/src/main/res/drawable/card_4_apr.xml" value="0.295" />
+        <entry key="app/src/main/res/drawable/card_5_mei.xml" value="0.155" />
+        <entry key="app/src/main/res/drawable/card_6_jun.xml" value="0.155" />
+        <entry key="app/src/main/res/drawable/card_7_jul.xml" value="0.155" />
+        <entry key="app/src/main/res/drawable/card_8_aug.xml" value="0.155" />
+        <entry key="app/src/main/res/drawable/card_9_sept.xml" value="0.155" />
+        <entry key="app/src/main/res/drawable/card_februari.xml" value="0.295" />
+        <entry key="app/src/main/res/drawable/circle_white.xml" value="0.295" />
+        <entry key="app/src/main/res/drawable/gradient.xml" value="0.2065" />
+        <entry key="app/src/main/res/drawable/gradient_coba.xml" value="0.295" />
+        <entry key="app/src/main/res/drawable/ic_addb.xml" value="0.2065" />
+        <entry key="app/src/main/res/drawable/ic_arrow_back.xml" value="0.234" />
+        <entry key="app/src/main/res/drawable/ic_arrow_circle_right.xml" value="0.234" />
+        <entry key="app/src/main/res/drawable/ic_logo.xml" value="0.2065" />
+        <entry key="app/src/main/res/drawable/ic_logo_white.xml" value="0.2065" />
+        <entry key="app/src/main/res/drawable/ic_more.xml" value="0.2065" />
+        <entry key="app/src/main/res/drawable/ic_pluss.xml" value="0.2065" />
+        <entry key="app/src/main/res/drawable/ic_profile.xml" value="0.2065" />
+        <entry key="app/src/main/res/drawable/ic_profile_bold.xml" value="0.2065" />
+        <entry key="app/src/main/res/drawable/ic_wave.xml" value="0.10429687500000001" />
+        <entry key="app/src/main/res/drawable/ic_wave1.xml" value="0.2065" />
+        <entry key="app/src/main/res/drawable/linear_shadow_bottom.xml" value="0.234" />
+        <entry key="app/src/main/res/drawable/logo.xml" value="0.1045" />
+        <entry key="app/src/main/res/drawable/logo_white.xml" value="0.1045" />
+        <entry key="app/src/main/res/drawable/rounded_white.xml" value="0.295" />
+        <entry key="app/src/main/res/layout/activity_berita.xml" value="0.32608695652173914" />
+        <entry key="app/src/main/res/layout/activity_berita_detail.xml" value="0.22554791110088124" />
+        <entry key="app/src/main/res/layout/activity_home.xml" value="0.27833709716796884" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.3596755981445312" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.40350036621093754" />
+        <entry key="app/src/main/res/layout/activity_pengeluaran.xml" value="0.32608695652173914" />
+        <entry key="app/src/main/res/layout/activity_register.xml" value="0.2964439245222066" />
+        <entry key="app/src/main/res/layout/activity_splash_screen.xml" value="0.37721557617187507" />
+        <entry key="app/src/main/res/layout/image_slider.xml" value="0.3378623188405797" />
+        <entry key="app/src/main/res/layout/item_catatan.xml" value="0.37798043710214124" />
+        <entry key="app/src/main/res/layout/item_laporan.xml" value="0.32776349138193095" />
+        <entry key="app/src/main/res/layout/item_news.xml" value="0.311083984375" />
+        <entry key="app/src/main/res/layout/item_news_all.xml" value="0.32608695652173914" />
+        <entry key="app/src/main/res/layout/pager_row.xml" value="0.3378623188405797" />
+        <entry key="app/src/main/res/layout/toolbar_back_button.xml" value="0.32608695652173914" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1045" />
+        <entry key="app/src/main/res/xml/network_security_config.xml" value="0.10106382978723404" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
