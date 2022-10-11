@@ -70,12 +70,12 @@ class AddCatatanFragment(homeActivity: HomeActivity) : DialogFragment() {
 
         spinnerMonth.adapter = ArrayAdapter(
             activity?.applicationContext!!,
-            android.R.layout.simple_spinner_item,
+            android.R.layout.simple_spinner_dropdown_item,
             bulanStringArray
         )
         spinnerYear.adapter = ArrayAdapter(
             activity?.applicationContext!!,
-            android.R.layout.simple_spinner_item,
+            android.R.layout.simple_spinner_dropdown_item,
             tahunStringArray
         )
         spinnerMonth.setSelection(thisMonth)
