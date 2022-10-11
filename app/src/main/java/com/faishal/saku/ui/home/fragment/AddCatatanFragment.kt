@@ -143,7 +143,7 @@ class AddCatatanFragment(homeActivity: HomeActivity) : DialogFragment() {
             Toast.makeText(activity, "Nominal Pendapatan Masih Kosong!", Toast.LENGTH_SHORT).show()
         } else {
             dismiss()
-            homeActivity.addCatatan(edtPendapatan.text.toString(), monthCatatan, yearCatatan)
+            homeActivity.showAds(edtPendapatan.text.toString(), monthCatatan, yearCatatan)
         }
     }
 }

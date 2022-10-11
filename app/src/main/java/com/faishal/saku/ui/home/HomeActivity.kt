@@ -1,7 +1,6 @@
 package com.faishal.saku.ui.home
 
 import android.app.ProgressDialog
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -30,7 +29,6 @@ import com.faishal.saku.presenter.catatan.CatatanPresenter
 import com.faishal.saku.presenter.news.NewsContract
 import com.faishal.saku.presenter.news.NewsPresenter
 import com.faishal.saku.ui.home.fragment.AddCatatanFragment
-import com.faishal.saku.ui.login.LoginActivity
 import com.faishal.saku.util.SessionManager
 import com.faishal.saku.util.Util
 import com.google.android.gms.ads.*
@@ -114,19 +112,13 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
         pd.show()
     }
 
-    fun addCatatan(nominalPendapatan: String, monthCatatan: Int, yearCatatan: Int) {
-        pd.show()
-        val date: String = yearCatatan.toString() + "-" + monthCatatan.toString() + "-01"
-        catatanPresenter.catatanAdd(sessionManager.getIdUser()!!, nominalPendapatan, date)
-    }
-
     @OnClick(R.id.btn_add)
     fun onBtnAddCatatanClicked() {
-        pd.show()
-        showAds()
+        AddCatatanFragment.newInstance(this).show(fragmentManager, "")
     }
 
-    private fun showAds() {
+     fun showAds(nominalPendapatan: String, monthCatatan: Int, yearCatatan: Int) {
+         pd.show()
         val requestConfiguration = RequestConfiguration.Builder()
             .setTestDeviceIds(Arrays.asList("D61B5A1C7673180EF3911FAE549E35B8"))
             .build()
@@ -162,12 +154,12 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
             mRewardedAd?.show(this) { rewardItem ->
                 var rewardAmount = rewardItem.amount
                 var rewardType = rewardItem.type
-                pd.cancel()
-                AddCatatanFragment.newInstance(this).show(fragmentManager, "")
+                val date: String = yearCatatan.toString() + "-" + monthCatatan.toString() + "-01"
+                catatanPresenter.catatanAdd(sessionManager.getIdUser()!!, nominalPendapatan, date)
             }
         } else {
             Handler(Looper.getMainLooper()).postDelayed({
-                showAds()
+                showAds(nominalPendapatan, monthCatatan, yearCatatan)
             }, 5000)
         }
     }
