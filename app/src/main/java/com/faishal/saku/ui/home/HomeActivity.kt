@@ -3,11 +3,11 @@ package com.faishal.saku.ui.home
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
-import android.view.MotionEvent
+import android.os.Handler
+import android.os.Looper
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +18,7 @@ import butterknife.OnClick
 import com.faishal.saku.R
 import com.faishal.saku.adapter.HomeAdapter
 import com.faishal.saku.adapter.NewsAdapter
+import com.faishal.saku.api.Server
 import com.faishal.saku.base.BaseActivity
 import com.faishal.saku.data.catatan.CatatanItem
 import com.faishal.saku.data.catatan.UserItem
@@ -29,8 +30,14 @@ import com.faishal.saku.presenter.catatan.CatatanPresenter
 import com.faishal.saku.presenter.news.NewsContract
 import com.faishal.saku.presenter.news.NewsPresenter
 import com.faishal.saku.ui.home.fragment.AddCatatanFragment
+import com.faishal.saku.ui.login.LoginActivity
 import com.faishal.saku.util.SessionManager
 import com.faishal.saku.util.Util
+import com.google.android.gms.ads.*
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import java.util.*
+
 
 class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.newsView {
 
@@ -63,6 +70,8 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
 
     private lateinit var fragmentManager: FragmentManager
 
+    private var mRewardedAd: RewardedAd? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -70,6 +79,7 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
 
         setView()
     }
+
 
     private fun setView() {
         sessionManager = SessionManager(this)
@@ -112,7 +122,54 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
 
     @OnClick(R.id.btn_add)
     fun onBtnAddCatatanClicked() {
-        AddCatatanFragment.newInstance(this).show(fragmentManager, "")
+        pd.show()
+        showAds()
+    }
+
+    private fun showAds() {
+        val requestConfiguration = RequestConfiguration.Builder()
+            .setTestDeviceIds(Arrays.asList("D61B5A1C7673180EF3911FAE549E35B8"))
+            .build()
+        MobileAds.setRequestConfiguration(requestConfiguration)
+
+        var adRequest = AdRequest.Builder().build()
+
+        RewardedAd.load(
+            this,
+            Server.ADS_ID_UNIT_TEST,
+            adRequest,
+            object : RewardedAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    mRewardedAd = null
+                }
+
+                override fun onAdLoaded(rewardedAd: RewardedAd) {
+                    mRewardedAd = rewardedAd
+                }
+            })
+
+        mRewardedAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+            override fun onAdDismissedFullScreenContent() {
+                mRewardedAd = null
+            }
+
+            override fun onAdFailedToShowFullScreenContent(p0: AdError) {
+                mRewardedAd = null
+            }
+        }
+
+        if (mRewardedAd != null) {
+            mRewardedAd?.show(this) { rewardItem ->
+                var rewardAmount = rewardItem.amount
+                var rewardType = rewardItem.type
+                pd.cancel()
+                AddCatatanFragment.newInstance(this).show(fragmentManager, "")
+            }
+        } else {
+            Handler(Looper.getMainLooper()).postDelayed({
+                showAds()
+            }, 5000)
+        }
     }
 
     @OnClick(R.id.btn_logout)
