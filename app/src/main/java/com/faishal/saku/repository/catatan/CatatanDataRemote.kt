@@ -15,6 +15,7 @@ class CatatanDataRemote : CatatanDataResource {
 
     private var apiInterface: APIInterface
     private lateinit var catatanResponseCall: Call<CatatanResponse>
+    private lateinit var addCatatanResponseCall: Call<CatatanResponse>
 
     constructor(context: Context) {
         apiInterface = APIClient.getRetrofit(context)!!.create(APIInterface::class.java)
@@ -49,6 +50,36 @@ class CatatanDataRemote : CatatanDataResource {
 
             override fun onFailure(call: Call<CatatanResponse>, t: Throwable) {
                 catatanCallback.onErrorCatatan(Server.CHECK_INTERNET_CONNECTION)
+            }
+
+        })
+    }
+
+    override fun catatanAdd(
+        id_user: String,
+        pendapatan: String,
+        waktu: String,
+        addCatatanCallback: CatatanDataResource.AddCatatanCallback
+    ) {
+        addCatatanResponseCall = apiInterface.catatanAdd(id_user, pendapatan, waktu)
+        addCatatanResponseCall.enqueue(object : Callback<CatatanResponse> {
+            override fun onResponse(
+                call: Call<CatatanResponse>,
+                response: Response<CatatanResponse>
+            ) {
+                try {
+                    if (response.body()!!.msg.equals("Berhasil")) {
+                        addCatatanCallback.onSuccessAddCatatan("Berhasil")
+                    } else {
+                        addCatatanCallback.onFailedAddCatatan("Gagal")
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+            override fun onFailure(call: Call<CatatanResponse>, t: Throwable) {
+                addCatatanCallback.onFailedAddCatatan(Server.CHECK_INTERNET_CONNECTION)
             }
 
         })

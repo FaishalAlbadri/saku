@@ -12,4 +12,33 @@
     </string>
 
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Fermentum et sollicitudin ac orci phasellus egestas tellus rutrum. Eget lorem dolor sed viverra ipsum nunc aliquet. Urna id volutpat lacus laoreet non curabitur. Morbi tincidunt augue interdum velit euismod in pellentesque. Sed faucibus turpis in eu. Vitae tortor condimentum lacinia quis vel eros donec. Enim lobortis scelerisque fermentum dui faucibus in ornare quam. Scelerisque varius morbi enim nunc faucibus. In metus vulputate eu scelerisque felis imperdiet. Vel quam elementum pulvinar etiam non quam lacus suspendisse faucibus. Enim diam vulputate ut pharetra sit amet. Suspendisse sed nisi lacus sed viverra. Scelerisque fermentum dui faucibus in. Risus pretium quam vulputate dignissim suspendisse in est ante. Malesuada bibendum arcu vitae elementum curabitur vitae nunc sed velit. Consequat nisl vel pretium lectus quam. Consectetur a erat nam at lectus urna duis convallis convallis. Proin sed libero enim sed faucibus turpis in. Ultricies lacus sed turpis tincidunt id aliquet risus. Dolor magna eget est lorem ipsum dolor sit amet consectetur. Eget nunc scelerisque viverra mauris in aliquam sem fringilla. Lobortis mattis aliquam faucibus purus in massa. Mattis pellentesque id nibh tortor id aliquet lectus proin. Euismod nisi porta lorem mollis. Lorem ipsum dolor sit amet consectetur adipiscing. Morbi tincidunt ornare massa eget. Venenatis a condimentum vitae sapien pellentesque. Massa eget egestas purus viverra accumsan in nisl nisi scelerisque. Ultrices in iaculis nunc sed augue lacus viverra. Pretium viverra suspendisse potenti nullam ac tortor vitae purus faucibus. At risus viverra adipiscing at. Et malesuada fames ac turpis egestas. Ornare lectus sit amet est placerat in egestas. Scelerisque purus semper eget duis at tellus at urna. Ut tortor pretium viverra suspendisse potenti nullam ac tortor. Mauris pellentesque pulvinar pellentesque habitant morbi tristique. Tellus cras adipiscing enim eu turpis. A arcu cursus vitae congue mauris. Orci a scelerisque purus semper eget duis at tellus. In fermentum posuere urna nec. Augue interdum velit euismod in pellentesque massa. Porttitor massa id neque aliquam vestibulum. Facilisis sed odio morbi quis commodo. Risus viverra adipiscing at in tellus integer feugiat scelerisque varius. Egestas fringilla phasellus faucibus scelerisque eleifend donec pretium. Odio pellentesque diam volutpat commodo sed egestas egestas. Porttitor lacus luctus accumsan tortor posuere. Risus in hendrerit gravida rutrum quisque non tellus. Turpis egestas integer eget aliquet nibh praesent tristique magna.</string>
+
+    <string-array name="month">
+        <item>Januari</item>
+        <item>Februari</item>
+        <item>Maret</item>
+        <item>April</item>
+        <item>Mei</item>
+        <item>Juni</item>
+        <item>Juli</item>
+        <item>Agustus</item>
+        <item>September</item>
+        <item>Oktober</item>
+        <item>November</item>
+        <item>Desember</item>
+    </string-array>
+
+    <string-array name="year">
+        <item>2020</item>
+        <item>2021</item>
+        <item>2022</item>
+        <item>2023</item>
+        <item>2024</item>
+        <item>2025</item>
+        <item>2026</item>
+        <item>2027</item>
+        <item>2028</item>
+        <item>2029</item>
+        <item>2030</item>
+    </string-array>
 </resources>

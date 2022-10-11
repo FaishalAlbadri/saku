@@ -32,6 +32,19 @@ class CatatanPresenter: CatatanContract.catatanPresenter {
         })
     }
 
+    override fun catatanAdd(id_user: String, pendapatan: String, waktu: String) {
+        catatanRepository.catatanAdd(id_user, pendapatan, waktu, object : CatatanDataResource.AddCatatanCallback {
+            override fun onSuccessAddCatatan(msg: String) {
+                catatanView.onSuccessAddCatatan(msg)
+            }
+
+            override fun onFailedAddCatatan(msg: String) {
+                catatanView.onFailedAddCatatan(msg)
+            }
+
+        })
+    }
+
     override fun onAttachView(view: CatatanContract.catatanView) {
         catatanView = view
     }

@@ -8,6 +8,8 @@ interface CatatanDataResource {
 
     fun catatan(id_user: String, @NonNull catatanCallback: CatatanCallback)
 
+    fun catatanAdd(id_user: String, pendapatan: String, waktu: String, @NonNull addCatatanCallback: AddCatatanCallback)
+
     interface CatatanCallback {
 
         fun onSuccessCatatan(
@@ -19,5 +21,10 @@ interface CatatanDataResource {
 
         fun onErrorCatatan(msg: String)
 
+    }
+
+    interface AddCatatanCallback {
+        fun onSuccessAddCatatan(msg: String)
+        fun onFailedAddCatatan(msg: String)
     }
 }

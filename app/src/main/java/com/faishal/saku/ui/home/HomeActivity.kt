@@ -8,6 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.NestedScrollView
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -27,6 +28,7 @@ import com.faishal.saku.presenter.catatan.CatatanContract
 import com.faishal.saku.presenter.catatan.CatatanPresenter
 import com.faishal.saku.presenter.news.NewsContract
 import com.faishal.saku.presenter.news.NewsPresenter
+import com.faishal.saku.ui.home.fragment.AddCatatanFragment
 import com.faishal.saku.util.SessionManager
 import com.faishal.saku.util.Util
 
@@ -59,6 +61,8 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
     private var catatanItem: ArrayList<CatatanItem> = ArrayList()
     private var newsItem: ArrayList<NewsItem> = ArrayList()
 
+    private lateinit var fragmentManager: FragmentManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -69,6 +73,8 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
 
     private fun setView() {
         sessionManager = SessionManager(this)
+
+        fragmentManager = supportFragmentManager
 
         newsAdapter = NewsAdapter(this, newsItem)
         rvNews.setLayoutManager(LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false))
@@ -98,6 +104,16 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
         pd.show()
     }
 
+    fun addCatatan(nominalPendapatan: String, monthCatatan: Int, yearCatatan: Int) {
+        pd.show()
+        val date: String = yearCatatan.toString() + "-" + monthCatatan.toString() + "-01"
+        catatanPresenter.catatanAdd(sessionManager.getIdUser()!!, nominalPendapatan, date)
+    }
+
+    @OnClick(R.id.btn_add)
+    fun onBtnAddCatatanClicked() {
+        AddCatatanFragment.newInstance(this).show(fragmentManager, "")
+    }
 
     @OnClick(R.id.btn_logout)
     fun onBtnLogoutClicked() {
@@ -122,6 +138,16 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
 
     override fun onErrorCatatan(msg: String) {
         refreshHome.setRefreshing(false)
+        pd.cancel()
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onSuccessAddCatatan(msg: String) {
+        catatanPresenter.catatan(sessionManager.getIdUser()!!)
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onFailedAddCatatan(msg: String) {
         pd.cancel()
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }

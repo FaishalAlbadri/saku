@@ -15,9 +15,13 @@ class CatatanContract {
         )
 
         fun onErrorCatatan(msg: String)
+
+        fun onSuccessAddCatatan(msg: String)
+        fun onFailedAddCatatan(msg: String)
     }
 
     interface catatanPresenter : BasePresenter<catatanView> {
         fun catatan(id_user: String)
+        fun catatanAdd(id_user: String, pendapatan: String, waktu: String)
     }
 }

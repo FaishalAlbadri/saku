@@ -34,6 +34,14 @@ interface APIInterface {
     ): Call<CatatanResponse>
 
     @FormUrlEncoded
+    @POST("catatan/add")
+    fun catatanAdd(
+        @Field("id_user") id_user: String,
+        @Field("catatan_pendapatan") catatan_pendapatan: String,
+        @Field("catatan_waktu") catatan_waktu: String
+    ): Call<CatatanResponse>
+
+    @FormUrlEncoded
     @POST("news/get")
     fun news(
         @Field("status") status: String
