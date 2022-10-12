@@ -128,7 +128,7 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
 
         RewardedAd.load(
             this,
-            Server.ADS_ID_UNIT_TEST,
+            Server.ADS_ID_UNIT,
             adRequest,
             object : RewardedAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
@@ -160,7 +160,7 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
         } else {
             Handler(Looper.getMainLooper()).postDelayed({
                 showAds(nominalPendapatan, monthCatatan, yearCatatan)
-            }, 5000)
+            }, 3000)
         }
     }
 
