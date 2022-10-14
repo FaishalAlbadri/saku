@@ -1,6 +1,7 @@
 package com.faishal.saku.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.faishal.saku.R
 import com.faishal.saku.data.catatan.CatatanItem
+import com.faishal.saku.ui.pengeluaran.PengeluaranActivity
 import com.faishal.saku.util.Util
 import org.jetbrains.annotations.NotNull
 
@@ -76,7 +78,10 @@ class HomeAdapter : RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         }
 
         holder.btnCatatan.setOnClickListener {
-            Toast.makeText(context, dataCatatan.catatanWaktu, Toast.LENGTH_SHORT).show()
+            context.startActivity(Intent(context, PengeluaranActivity::class.java)
+                .putExtra("id_catatan", dataCatatan.idCatatan)
+                .putExtra("waktu", dataCatatan.catatanWaktu)
+            )
         }
 
 

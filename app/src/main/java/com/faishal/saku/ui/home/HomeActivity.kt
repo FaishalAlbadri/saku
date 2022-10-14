@@ -119,10 +119,10 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
 
      fun showAds(nominalPendapatan: String, monthCatatan: Int, yearCatatan: Int) {
          pd.show()
-        val requestConfiguration = RequestConfiguration.Builder()
-            .setTestDeviceIds(Arrays.asList("D61B5A1C7673180EF3911FAE549E35B8"))
-            .build()
-        MobileAds.setRequestConfiguration(requestConfiguration)
+//        val requestConfiguration = RequestConfiguration.Builder()
+//            .setTestDeviceIds(Arrays.asList("D61B5A1C7673180EF3911FAE549E35B8"))
+//            .build()
+//        MobileAds.setRequestConfiguration(requestConfiguration)
 
         var adRequest = AdRequest.Builder().build()
 
@@ -133,20 +133,24 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
             object : RewardedAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     mRewardedAd = null
+                    pd.cancel()
                 }
 
                 override fun onAdLoaded(rewardedAd: RewardedAd) {
                     mRewardedAd = rewardedAd
+                    pd.cancel()
                 }
             })
 
         mRewardedAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
             override fun onAdDismissedFullScreenContent() {
                 mRewardedAd = null
+                pd.cancel()
             }
 
             override fun onAdFailedToShowFullScreenContent(p0: AdError) {
                 mRewardedAd = null
+                pd.cancel()
             }
         }
 
@@ -155,6 +159,7 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
                 var rewardAmount = rewardItem.amount
                 var rewardType = rewardItem.type
                 val date: String = yearCatatan.toString() + "-" + monthCatatan.toString() + "-01"
+                pd.show()
                 catatanPresenter.catatanAdd(sessionManager.getIdUser()!!, nominalPendapatan, date)
             }
         } else {

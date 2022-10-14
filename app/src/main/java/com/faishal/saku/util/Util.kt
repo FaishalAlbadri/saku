@@ -26,8 +26,8 @@ object Util {
         return NumberFormat.getCurrencyInstance(Locale("in", "ID")).format(number.toDouble())
     }
 
-    fun currencyRupiah(string: String?): String? {
-        val number = Integer.valueOf(string)
+    fun currencyRupiah(string: String): String {
+        val number = string.toInt()
         return NumberFormat.getCurrencyInstance(Locale("in", "ID")).format(number.toDouble())
     }
 
