@@ -49,16 +49,20 @@
         <entry key="app/src/main/res/layout/activity_splash_screen.xml" value="0.37721557617187507" />
         <entry key="app/src/main/res/layout/asd.xml" value="0.352405315896739" />
         <entry key="app/src/main/res/layout/fragment_add_catatan.xml" value="0.32608695652173914" />
+        <entry key="app/src/main/res/layout/fragment_add_pengeluaran_dialog.xml" value="0.3347193806030936" />
+        <entry key="app/src/main/res/layout/fragment_delete_pengeluaran_dialog.xml" value="0.15566234851650648" />
+        <entry key="app/src/main/res/layout/fragment_edit_pengeluaran_dialog.xml" value="0.3185121846943138" />
         <entry key="app/src/main/res/layout/image_slider.xml" value="0.3378623188405797" />
         <entry key="app/src/main/res/layout/item_catatan.xml" value="0.37798043710214124" />
         <entry key="app/src/main/res/layout/item_info_pengeluaran.xml" value="0.5727708672758323" />
         <entry key="app/src/main/res/layout/item_laporan.xml" value="0.32776349138193095" />
         <entry key="app/src/main/res/layout/item_news.xml" value="0.311083984375" />
         <entry key="app/src/main/res/layout/item_news_all.xml" value="0.32608695652173914" />
-        <entry key="app/src/main/res/layout/item_pengeluaran.xml" value="0.9464779192079282" />
+        <entry key="app/src/main/res/layout/item_pengeluaran.xml" value="0.36167297363281253" />
         <entry key="app/src/main/res/layout/item_pengeluaran_hari.xml" value="0.3748489379882813" />
         <entry key="app/src/main/res/layout/pager_row.xml" value="0.3378623188405797" />
         <entry key="app/src/main/res/layout/toolbar_back_button.xml" value="0.32608695652173914" />
+        <entry key="app/src/main/res/menu/pengeluaran.xml" value="0.41002314625870917" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1045" />
         <entry key="app/src/main/res/xml/network_security_config.xml" value="0.10106382978723404" />
       </map>

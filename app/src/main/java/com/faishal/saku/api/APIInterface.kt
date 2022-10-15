@@ -57,10 +57,35 @@ interface APIInterface {
     ): Call<KategoriDanaResponse>
 
     @FormUrlEncoded
-    @POST("pengeluaran/getByDate")
+    @POST("pengeluaran/get")
     fun pengeluaran(
         @Field("id_user") id_user: String,
         @Field("id_catatan") id_catatan: String
     ): Call<PengeluaranHariResponse>
+
+    @FormUrlEncoded
+    @POST("pengeluaran/add")
+    fun pengeluaranAdd(
+        @Field("id_user") id_user: String,
+        @Field("id_catatan") id_catatan: String,
+        @Field("id_kategori_dana") id_kategori_dana: String,
+        @Field("id_kategori_pokok") id_kategori_pokok: String,
+        @Field("catatan_item_desc") catatan_item_desc: String,
+        @Field("catatan_item_harga") catatan_item_harga: String
+    ): Call<BaseResponse>
+
+    @FormUrlEncoded
+    @POST("pengeluaran/edit")
+    fun pengeluaranEdit(
+        @Field("id_catatan_item") id_catatan_item: String,
+        @Field("catatan_item_desc") catatan_item_desc: String,
+        @Field("catatan_item_harga") catatan_item_harga: String
+    ): Call<BaseResponse>
+
+    @FormUrlEncoded
+    @POST("pengeluaran/delete")
+    fun pengeluaranDelete(
+        @Field("id_catatan_item") id_catatan_item: String
+    ): Call<BaseResponse>
 
 }

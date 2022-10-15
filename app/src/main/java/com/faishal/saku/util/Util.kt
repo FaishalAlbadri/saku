@@ -22,13 +22,21 @@ object Util {
         }
     }
 
-    fun currencyRupiah(number: Int): String? {
-        return NumberFormat.getCurrencyInstance(Locale("in", "ID")).format(number.toDouble())
+    fun currencyRupiah(number: Int): String {
+        var numberS = NumberFormat.getCurrencyInstance(Locale("in", "ID")).format(number.toDouble())
+        if (numberS.contains(",")) {
+            numberS = numberS.dropLast(3)
+        }
+        return numberS
     }
 
     fun currencyRupiah(string: String): String {
         val number = string.toInt()
-        return NumberFormat.getCurrencyInstance(Locale("in", "ID")).format(number.toDouble())
+        var numberS = NumberFormat.getCurrencyInstance(Locale("in", "ID")).format(number.toDouble())
+        if (numberS.contains(",")) {
+            numberS = numberS.dropLast(3)
+        }
+        return numberS
     }
 
     fun pengeluarangaji(pengeluaran: String, pemasukan: String): String {

@@ -1,11 +1,13 @@
 package com.faishal.saku.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +15,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.faishal.saku.R
 import com.faishal.saku.data.pengeluaran.PengeluaranItem
+import com.faishal.saku.ui.pengeluaran.PengeluaranActivity
 import com.faishal.saku.util.Util
 import org.jetbrains.annotations.NotNull
 
@@ -47,8 +50,44 @@ class PengeluaranAdapter : RecyclerView.Adapter<PengeluaranAdapter.ViewHolder> {
         holder.txtJudul.setText(dataPengeluaranItem.catatanItemDesc)
         holder.txtHarga.setText(Util.currencyRupiah(dataPengeluaranItem.catatanItemHarga))
 
+        val popupMenu = PopupMenu(context, holder.btnMore)
+        popupMenu.inflate(R.menu.pengeluaran)
+        popupMenu.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
+            override fun onMenuItemClick(item: MenuItem): Boolean {
+                when (item.itemId) {
+                    R.id.edit -> {
+                        (context as PengeluaranActivity).showEditDialog(
+                            dataPengeluaranItem.idCatatanItem,
+                            dataPengeluaranItem.catatanItemHarga,
+                            dataPengeluaranItem.catatanItemDesc
+                        )
+                        return true
+                    }
+
+                    R.id.delete -> {
+                        (context as PengeluaranActivity).showDeleteDialog(
+                            dataPengeluaranItem.idCatatanItem,
+                            dataPengeluaranItem.catatanItemDesc
+                        )
+                        return true
+                    }
+                }
+                return false
+            }
+        })
+
         holder.btnMore.setOnClickListener {
-            Log.i("Button Delete", dataPengeluaranItem.catatanItemDesc)
+            try {
+                val fieldMPopup = PopupMenu::class.java.getDeclaredField("mPopup")
+                fieldMPopup.isAccessible = true
+                val mPopup = fieldMPopup.get(popupMenu)
+                mPopup.javaClass.getDeclaredMethod("setForceShowIcon", Boolean::class.java)
+                    .invoke(mPopup, true)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                popupMenu.show()
+            }
         }
     }
 

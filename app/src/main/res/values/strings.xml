@@ -41,4 +41,24 @@
         <item>2029</item>
         <item>2030</item>
     </string-array>
+
+    <string-array name="kategori_pengeluaran">
+        <item>Pilih Pengeluaran</item>
+        <item>Pokok</item>
+        <item>Tabungan / Investasi</item>
+        <item>Darurat</item>
+        <item>Sedekah</item>
+        <item>Lifestyle</item>
+    </string-array>
+
+    <string-array name="kategori_pokok">
+        <item>Pilih Kategori</item>
+        <item>Makanan &amp; Minuman</item>
+        <item>Obat &amp; Vitamin</item>
+        <item>Transportasi</item>
+        <item>Kebersihan</item>
+        <item>Tagihan</item>
+        <item>Lain-lain</item>
+    </string-array>
+
 </resources>

@@ -4,6 +4,9 @@ import android.app.ProgressDialog
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -23,11 +26,14 @@ import com.faishal.saku.presenter.kategori.dana.KategoriDanaContract
 import com.faishal.saku.presenter.kategori.dana.KategoriDanaPresenter
 import com.faishal.saku.presenter.pengeluaran.PengeluaranContract
 import com.faishal.saku.presenter.pengeluaran.PengeluaranPresenter
+import com.faishal.saku.ui.pengeluaran.fragment.AddPengeluaranDialogFragment
+import com.faishal.saku.ui.pengeluaran.fragment.EditPengeluaranDialogFragment
 import com.faishal.saku.util.SessionManager
 import com.faishal.saku.util.Util
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class PengeluaranActivity : BaseActivity(), KategoriDanaContract.kategoriDanaView, PengeluaranContract.pengeluaranView {
+class PengeluaranActivity : BaseActivity(), KategoriDanaContract.kategoriDanaView,
+    PengeluaranContract.pengeluaranView {
 
     @BindView(R.id.btn_back)
     lateinit var btnBack: ImageView
@@ -60,6 +66,8 @@ class PengeluaranActivity : BaseActivity(), KategoriDanaContract.kategoriDanaVie
     private lateinit var waktu: String
     private lateinit var sessionManager: SessionManager
 
+    private lateinit var fragmentManager: FragmentManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pengeluaran)
@@ -77,7 +85,13 @@ class PengeluaranActivity : BaseActivity(), KategoriDanaContract.kategoriDanaVie
         sessionManager = SessionManager(this)
 
         pengeluaranKategoriDanaAdapter = PengeluaranKategoriDanaAdapter(this, kategoriDanaItem)
-        rvInfoPengeluaran.setLayoutManager(LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false))
+        rvInfoPengeluaran.setLayoutManager(
+            LinearLayoutManager(
+                this,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+        )
         rvInfoPengeluaran.setAdapter(pengeluaranKategoriDanaAdapter)
 
         pengeluaranHariAdapter = PengeluaranHariAdapter(this, pengeluaranHariItem)
@@ -92,6 +106,8 @@ class PengeluaranActivity : BaseActivity(), KategoriDanaContract.kategoriDanaVie
 
         kategoriDanaPresenter.kategoriDana(sessionManager.getIdUser().toString(), idCatatan)
 
+        fragmentManager = supportFragmentManager
+
         Util.refreshColor(refreshPengeluaran)
         refreshPengeluaran.setOnRefreshListener {
             kategoriDanaPresenter.kategoriDana(sessionManager.getIdUser().toString(), idCatatan)
@@ -102,6 +118,56 @@ class PengeluaranActivity : BaseActivity(), KategoriDanaContract.kategoriDanaVie
         pd.setCanceledOnTouchOutside(false)
         pd.setMessage("Loading")
         pd.show()
+    }
+
+    fun showDeleteDialog(idPengeluaran: String, descPengeluaran: String) {
+        AlertDialog.Builder(this, R.style.AlertDialogTheme)
+            .setTitle("Hapus Pengeluaran")
+            .setMessage("Apakah anda yakin ingin menghapus \n\"" + descPengeluaran + "\" ?")
+            .setPositiveButton("Hapus") { dialogInterface, i ->
+                pengeluaranPresenter.deletePengeluaran(idPengeluaran)
+                pd.show()
+            }
+            .setNegativeButton("Batal") { dialogInterface, i ->
+                dialogInterface.dismiss()
+            }
+            .show()
+    }
+
+    fun showEditDialog(idPengeluaran: String, nominalPengeluaran: String, descPengeluaran: String) {
+        EditPengeluaranDialogFragment.newInstance(
+            this,
+            idPengeluaran,
+            nominalPengeluaran,
+            descPengeluaran
+        )
+            .show(fragmentManager, "")
+    }
+
+    fun editPengeluaran(
+        idPengeluaran: String,
+        nominalPengeluaran: String,
+        descPengeluaran: String
+    ) {
+        pd.show()
+        pengeluaranPresenter.editPengeluaran(idPengeluaran, descPengeluaran, nominalPengeluaran)
+    }
+
+    fun addPengeluaran(
+        idKategoriDana: String,
+        idKategoriPokok: String,
+        nominalPengeluaran: String,
+        descPengeluaran: String
+    ) {
+        pd.show()
+        pengeluaranPresenter.addPengeluaran(
+            sessionManager.getIdUser().toString(),
+            idCatatan,
+            idKategoriDana,
+            idKategoriPokok,
+            descPengeluaran,
+            nominalPengeluaran
+        )
     }
 
     override fun onSuccessKategoriDana(danaListItem: List<KategoriDanaItem>, msg: String) {
@@ -139,8 +205,46 @@ class PengeluaranActivity : BaseActivity(), KategoriDanaContract.kategoriDanaVie
         }
     }
 
+    override fun onSuccessAddPengeluaran(msg: String) {
+        kategoriDanaPresenter.kategoriDana(sessionManager.getIdUser().toString(), idCatatan)
+    }
+
+    override fun onErrorAddPengeluaran(msg: String) {
+        refreshPengeluaran.setRefreshing(false)
+        pd.cancel()
+
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onSuccessEditPengeluaran(msg: String) {
+        kategoriDanaPresenter.kategoriDana(sessionManager.getIdUser().toString(), idCatatan)
+    }
+
+    override fun onErrorEditPengeluaran(msg: String) {
+        refreshPengeluaran.setRefreshing(false)
+        pd.cancel()
+
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onSuccessDeletePengeluaran(msg: String) {
+        kategoriDanaPresenter.kategoriDana(sessionManager.getIdUser().toString(), idCatatan)
+    }
+
+    override fun onErrorDeletePengeluaran(msg: String) {
+        refreshPengeluaran.setRefreshing(false)
+        pd.cancel()
+
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+    }
+
     @OnClick(R.id.btn_back)
     fun onBtnBackClicked() {
         onBackPressed()
+    }
+
+    @OnClick(R.id.btn_add)
+    fun onBtnAddClicked() {
+        AddPengeluaranDialogFragment.newInstance(this).show(fragmentManager, "")
     }
 }
