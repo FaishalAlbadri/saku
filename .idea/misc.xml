@@ -42,7 +42,8 @@
         <entry key="app/src/main/res/layout/activity_berita.xml" value="0.32608695652173914" />
         <entry key="app/src/main/res/layout/activity_berita_detail.xml" value="0.44982464449931875" />
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.25854797363281257" />
-        <entry key="app/src/main/res/layout/activity_login.xml" value="0.15566234851650648" />
+        <entry key="app/src/main/res/layout/activity_impianku.xml" value="0.3185121846943138" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.2569410350399439" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.40350036621093754" />
         <entry key="app/src/main/res/layout/activity_pengeluaran.xml" value="0.31768035888671875" />
         <entry key="app/src/main/res/layout/activity_register.xml" value="0.2964439245222066" />

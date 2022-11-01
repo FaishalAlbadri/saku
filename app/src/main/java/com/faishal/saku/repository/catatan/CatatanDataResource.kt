@@ -19,6 +19,8 @@ interface CatatanDataResource {
             msg: String
         )
 
+        fun onBlankCatatan(userListItem: List<UserItem>, dateS: String, msg: String)
+
         fun onErrorCatatan(msg: String)
 
     }

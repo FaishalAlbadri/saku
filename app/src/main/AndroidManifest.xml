@@ -4,7 +4,7 @@
     package="com.faishal.saku">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -20,9 +20,14 @@
         android:theme="@style/Theme.Saku"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.impianku.ImpiankuActivity"
+            android:exported="false" />
+
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3011092338336796~3385709768"/>
+            android:value="ca-app-pub-3011092338336796~3385709768" />
+
         <activity
             android:name=".ui.berita.BeritaActivity"
             android:exported="false" />

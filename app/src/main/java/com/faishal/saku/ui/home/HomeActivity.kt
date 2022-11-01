@@ -1,6 +1,7 @@
 package com.faishal.saku.ui.home
 
 import android.app.ProgressDialog
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -29,6 +30,7 @@ import com.faishal.saku.presenter.catatan.CatatanPresenter
 import com.faishal.saku.presenter.news.NewsContract
 import com.faishal.saku.presenter.news.NewsPresenter
 import com.faishal.saku.ui.home.fragment.AddCatatanFragment
+import com.faishal.saku.ui.impianku.ImpiankuActivity
 import com.faishal.saku.util.SessionManager
 import com.faishal.saku.util.Util
 import com.google.android.gms.ads.*
@@ -47,6 +49,9 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
 
     @BindView(R.id.btn_logout)
     lateinit var btnLogout: ConstraintLayout
+
+    @BindView(R.id.btn_impianku)
+    lateinit var btnImpianku: ConstraintLayout
 
     @BindView(R.id.rv_laporan)
     lateinit var rvLaporan: RecyclerView
@@ -117,18 +122,14 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
         AddCatatanFragment.newInstance(this).show(fragmentManager, "")
     }
 
-     fun showAds(nominalPendapatan: String, monthCatatan: Int, yearCatatan: Int) {
-         pd.show()
-//        val requestConfiguration = RequestConfiguration.Builder()
-//            .setTestDeviceIds(Arrays.asList("D61B5A1C7673180EF3911FAE549E35B8"))
-//            .build()
-//        MobileAds.setRequestConfiguration(requestConfiguration)
+    fun showAds(nominalPendapatan: String, monthCatatan: Int, yearCatatan: Int) {
+        pd.show()
 
         var adRequest = AdRequest.Builder().build()
 
         RewardedAd.load(
             this,
-            Server.ADS_ID_UNIT,
+            Server.ADS_ID_UNIT_TEST,
             adRequest,
             object : RewardedAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
@@ -169,6 +170,11 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
         }
     }
 
+    @OnClick(R.id.btn_impianku)
+    fun onBtnImpiankuClicked() {
+        startActivity(Intent(applicationContext, ImpiankuActivity::class.java))
+    }
+
     @OnClick(R.id.btn_logout)
     fun onBtnLogoutClicked() {
         sessionManager.logout()
@@ -188,6 +194,13 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
         catatanItem.clear()
         catatanItem.addAll(catatanListItem)
         homeAdapter.notifyDataSetChanged()
+    }
+
+    override fun onBlankCatatan(userListItem: List<UserItem>, dateS: String, msg: String) {
+        refreshHome.setRefreshing(false)
+        pd.cancel()
+        txtDate.setText(dateS)
+        txtUsername.setText("Hi... " + userListItem!!.get(0)!!.userName)
     }
 
     override fun onErrorCatatan(msg: String) {

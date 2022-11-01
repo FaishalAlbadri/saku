@@ -41,7 +41,10 @@ class CatatanDataRemote : CatatanDataResource {
                             response.body()!!.msg
                         )
                     } else {
-                        catatanCallback.onErrorCatatan(response.body()!!.msg)
+                        val catatanResponse: CatatanResponse = response.body()!!
+                        val userItem: List<UserItem> = catatanResponse.user
+                        val date: String = catatanResponse.date!!
+                        catatanCallback.onBlankCatatan(userItem, date, response.body()!!.msg)
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
