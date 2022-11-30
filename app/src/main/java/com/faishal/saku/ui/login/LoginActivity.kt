@@ -14,6 +14,7 @@ import com.faishal.saku.base.BaseFullScreenActivity
 import com.faishal.saku.di.LoginRepositoryInject
 import com.faishal.saku.presenter.login.LoginContract
 import com.faishal.saku.presenter.login.LoginPresenter
+import com.faishal.saku.ui.forget.ForgetPasswordActivity
 import com.faishal.saku.ui.home.HomeActivity
 import com.faishal.saku.ui.register.RegisterActivity
 import com.faishal.saku.util.SessionManager
@@ -103,7 +104,7 @@ class LoginActivity : BaseFullScreenActivity(), LoginContract.loginView {
 
     @OnClick(R.id.btn_forget_password)
     fun onBtnForgetPasswordClicked(){
-        Toast.makeText(this, "Forget Password", Toast.LENGTH_SHORT).show()
+        startActivity(Intent(applicationContext, ForgetPasswordActivity::class.java))
     }
 
     override fun onSuccessLogin(idUser: String, msg: String) {

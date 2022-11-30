@@ -29,8 +29,10 @@ import com.faishal.saku.presenter.catatan.CatatanContract
 import com.faishal.saku.presenter.catatan.CatatanPresenter
 import com.faishal.saku.presenter.news.NewsContract
 import com.faishal.saku.presenter.news.NewsPresenter
+import com.faishal.saku.ui.aboutus.AboutUsActivity
 import com.faishal.saku.ui.home.fragment.AddCatatanFragment
 import com.faishal.saku.ui.impianku.ImpiankuActivity
+import com.faishal.saku.ui.profile.ProfileActivity
 import com.faishal.saku.util.SessionManager
 import com.faishal.saku.util.Util
 import com.google.android.gms.ads.*
@@ -49,6 +51,9 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
 
     @BindView(R.id.btn_logout)
     lateinit var btnLogout: ConstraintLayout
+
+    @BindView(R.id.btn_aboutus)
+    lateinit var btnAboutus: ConstraintLayout
 
     @BindView(R.id.btn_impianku)
     lateinit var btnImpianku: ConstraintLayout
@@ -173,6 +178,16 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
     @OnClick(R.id.btn_impianku)
     fun onBtnImpiankuClicked() {
         startActivity(Intent(applicationContext, ImpiankuActivity::class.java))
+    }
+
+    @OnClick(R.id.btn_aboutus)
+    fun onBtnAboutusClicked() {
+        startActivity(Intent(applicationContext, AboutUsActivity::class.java))
+    }
+
+    @OnClick(R.id.img_profile)
+    fun onBtnProfileClicked() {
+        startActivity(Intent(applicationContext, ProfileActivity::class.java))
     }
 
     @OnClick(R.id.btn_logout)
