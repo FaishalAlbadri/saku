@@ -67,6 +67,7 @@
         <entry key="app/src/main/res/layout/fragment_add_pengeluaran_dialog.xml" value="0.3347193806030936" />
         <entry key="app/src/main/res/layout/fragment_delete_pengeluaran_dialog.xml" value="0.15566234851650648" />
         <entry key="app/src/main/res/layout/fragment_edit_pengeluaran_dialog.xml" value="0.3185121846943138" />
+        <entry key="app/src/main/res/layout/fragment_scrapper_dialog.xml" value="0.3185121846943138" />
         <entry key="app/src/main/res/layout/image_slider.xml" value="0.3378623188405797" />
         <entry key="app/src/main/res/layout/item_catatan.xml" value="0.37798043710214124" />
         <entry key="app/src/main/res/layout/item_info_pengeluaran.xml" value="0.5727708672758323" />
