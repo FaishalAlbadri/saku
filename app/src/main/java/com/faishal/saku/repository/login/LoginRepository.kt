@@ -15,4 +15,8 @@ class LoginRepository : LoginDataResource {
     ) {
         loginDataResource.login(user_email, user_password, loginCallback)
     }
+
+    override fun profile(idUser: String, profileCallback: LoginDataResource.ProfileCallback) {
+        loginDataResource.profile(idUser, profileCallback)
+    }
 }

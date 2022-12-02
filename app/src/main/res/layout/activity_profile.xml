@@ -101,7 +101,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Ahmad Faishal Albadri"
             android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="@+id/txt_name"
             app:layout_constraintRight_toRightOf="@+id/txt_name"
@@ -138,7 +137,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="faishalalbadri1@gmail.com"
             android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="@+id/txt_email"
             app:layout_constraintRight_toRightOf="@+id/txt_email"
@@ -175,7 +173,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="+62 813 1665 7908"
             android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="@+id/txt_phone"
             app:layout_constraintRight_toRightOf="@+id/txt_phone"
@@ -212,12 +209,25 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="17 Januari 2022"
             android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="@+id/txt_create"
             app:layout_constraintRight_toRightOf="@+id/txt_create"
             app:layout_constraintTop_toBottomOf="@+id/txt_create" />
 
+        <TextView
+            android:id="@+id/btn_logout"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_btn_rounded_primary"
+            android:foreground="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:text="Logout"
+            android:textAllCaps="true"
+            android:textColor="@color/primary_dark"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_create_value"
+            app:layout_constraintVertical_bias="1" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -49,4 +49,28 @@ class LoginDataRemote : LoginDataResource {
 
         })
     }
+
+    override fun profile(idUser: String, profileCallback: LoginDataResource.ProfileCallback) {
+        userResponseCall = apiInterface.profile(idUser)
+        userResponseCall.enqueue(object : Callback<UserResponse> {
+            override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
+                try {
+                    if (response.body()!!.msg.equals("Berhasil")) {
+                        val userResponse: UserResponse = response.body()!!
+                        val userItem: List<UserItem> = userResponse.user
+                        profileCallback.onSuccessProfile(userItem, response.body()!!.msg)
+                    } else {
+                        profileCallback.onErrorProfile(response.body()!!.msg)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+            override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+                profileCallback.onErrorProfile(Server.CHECK_INTERNET_CONNECTION)
+            }
+
+        })
+    }
 }

@@ -11,6 +11,7 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import com.faishal.saku.R
 import com.faishal.saku.base.BaseFullScreenActivity
+import com.faishal.saku.data.user.UserItem
 import com.faishal.saku.di.LoginRepositoryInject
 import com.faishal.saku.presenter.login.LoginContract
 import com.faishal.saku.presenter.login.LoginPresenter
@@ -118,5 +119,13 @@ class LoginActivity : BaseFullScreenActivity(), LoginContract.loginView {
     override fun onErrorLogin(msg: String) {
         pd.cancel()
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onSuccessProfile(userItemList: List<UserItem>, msg: String) {
+
+    }
+
+    override fun onErrorProfile(msg: String) {
+
     }
 }

@@ -5,6 +5,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.MenuItem
+import android.widget.ImageView
+import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -30,6 +33,8 @@ import com.faishal.saku.presenter.catatan.CatatanPresenter
 import com.faishal.saku.presenter.news.NewsContract
 import com.faishal.saku.presenter.news.NewsPresenter
 import com.faishal.saku.ui.aboutus.AboutUsActivity
+import com.faishal.saku.ui.berita.BeritaActivity
+import com.faishal.saku.ui.foodspin.FoodSpinWheelActivity
 import com.faishal.saku.ui.home.fragment.AddCatatanFragment
 import com.faishal.saku.ui.impianku.ImpiankuActivity
 import com.faishal.saku.ui.profile.ProfileActivity
@@ -49,11 +54,14 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
     @BindView(R.id.txt_username)
     lateinit var txtUsername: TextView
 
-    @BindView(R.id.btn_logout)
-    lateinit var btnLogout: ConstraintLayout
+    @BindView(R.id.btn_more)
+    lateinit var btnMore: ImageView
 
-    @BindView(R.id.btn_aboutus)
-    lateinit var btnAboutus: ConstraintLayout
+    @BindView(R.id.btn_food)
+    lateinit var btnFood: ConstraintLayout
+
+    @BindView(R.id.btn_news)
+    lateinit var btnNews: ConstraintLayout
 
     @BindView(R.id.btn_impianku)
     lateinit var btnImpianku: ConstraintLayout
@@ -175,14 +183,30 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
         }
     }
 
+    @OnClick(R.id.btn_more)
+    fun onBtnMoreClicker() {
+        val popupMenu = PopupMenu(this, btnMore)
+        popupMenu.menuInflater.inflate(R.menu.home, popupMenu.menu)
+        popupMenu.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
+            override fun onMenuItemClick(item: MenuItem?): Boolean {
+                when(item!!.itemId) {
+                    R.id.aboutus -> startActivity(Intent(applicationContext, AboutUsActivity::class.java))
+                }
+                return true
+            }
+
+        })
+        popupMenu.show()
+    }
+
     @OnClick(R.id.btn_impianku)
     fun onBtnImpiankuClicked() {
         startActivity(Intent(applicationContext, ImpiankuActivity::class.java))
     }
 
-    @OnClick(R.id.btn_aboutus)
-    fun onBtnAboutusClicked() {
-        startActivity(Intent(applicationContext, AboutUsActivity::class.java))
+    @OnClick(R.id.btn_news)
+    fun onBtnNewsClicked() {
+        startActivity(Intent(applicationContext, BeritaActivity::class.java))
     }
 
     @OnClick(R.id.img_profile)
@@ -190,9 +214,9 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
         startActivity(Intent(applicationContext, ProfileActivity::class.java))
     }
 
-    @OnClick(R.id.btn_logout)
-    fun onBtnLogoutClicked() {
-        sessionManager.logout()
+    @OnClick(R.id.btn_food)
+    fun onBtnFoodClicked() {
+        startActivity(Intent(applicationContext, FoodSpinWheelActivity::class.java))
     }
 
     override fun onSuccessCatatan(

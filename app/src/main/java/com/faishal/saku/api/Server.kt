@@ -5,6 +5,7 @@ object Server {
     const val IP_ADDRESS = "https://mobavpad.000webhostapp.com/"
     const val BASE_URL = IP_ADDRESS + "saku/"
     const val BASE_URL_IMG = BASE_URL + "assets/"
+    const val BASE_URL_IMG_USER = BASE_URL_IMG + "user/"
     const val BASE_URL_IMG_NEWS = BASE_URL_IMG + "news/"
     const val CHECK_INTERNET_CONNECTION = "Check your internet connection"
 

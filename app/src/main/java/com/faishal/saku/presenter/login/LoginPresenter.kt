@@ -1,5 +1,6 @@
 package com.faishal.saku.presenter.login
 
+import com.faishal.saku.data.user.UserItem
 import com.faishal.saku.repository.login.LoginDataResource
 import com.faishal.saku.repository.login.LoginRepository
 
@@ -21,6 +22,19 @@ class LoginPresenter : LoginContract.loginPresenter {
 
             override fun onErrorLogin(msg: String) {
                 loginView.onErrorLogin(msg)
+            }
+
+        })
+    }
+
+    override fun profile(idUser: String) {
+        loginRepository.profile(idUser, object : LoginDataResource.ProfileCallback {
+            override fun onSuccessProfile(userItemList: List<UserItem>, msg: String) {
+                loginView.onSuccessProfile(userItemList, msg)
+            }
+
+            override fun onErrorProfile(msg: String) {
+                loginView.onErrorProfile(msg)
             }
 
         })

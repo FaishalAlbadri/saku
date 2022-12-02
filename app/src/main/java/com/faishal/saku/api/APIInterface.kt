@@ -5,6 +5,7 @@ import com.faishal.saku.data.catatan.CatatanResponse
 import com.faishal.saku.data.kategori.dana.KategoriDanaResponse
 import com.faishal.saku.data.news.NewsResponse
 import com.faishal.saku.data.pengeluaran.PengeluaranHariResponse
+import com.faishal.saku.data.scrapper.ScrapperResponse
 import retrofit2.http.POST
 import com.faishal.saku.data.user.UserResponse
 import retrofit2.Call
@@ -12,6 +13,12 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 
 interface APIInterface {
+
+    @FormUrlEncoded
+    @POST("user/profile")
+    fun profile(
+        @Field("id_user") id_user: String,
+    ): Call<UserResponse>
 
     @FormUrlEncoded
     @POST("user/login")
@@ -87,5 +94,11 @@ interface APIInterface {
     fun pengeluaranDelete(
         @Field("id_catatan_item") id_catatan_item: String
     ): Call<BaseResponse>
+
+    @FormUrlEncoded
+    @POST("impianku/shoope-produk")
+    fun scrapperShoope(
+        @Field("link") link: String
+    ): Call<ScrapperResponse>
 
 }
