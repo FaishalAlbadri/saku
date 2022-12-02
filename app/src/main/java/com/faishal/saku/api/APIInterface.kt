@@ -101,4 +101,15 @@ interface APIInterface {
         @Field("link") link: String
     ): Call<ScrapperResponse>
 
+    @FormUrlEncoded
+    @POST("impianku/add-shopee")
+    fun addImpiankuShopee(
+        @Field("id_user") id_user: String,
+        @Field("impianku_title") impianku_title: String,
+        @Field("impianku_price") impianku_price: String,
+        @Field("impianku_img") impianku_img: String,
+        @Field("impianku_days") impianku_days: String,
+        @Field("impianku_link_shopee") impianku_link_shopee: String
+    ): Call<BaseResponse>
+
 }

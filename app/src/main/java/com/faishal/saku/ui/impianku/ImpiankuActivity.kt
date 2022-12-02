@@ -1,5 +1,6 @@
 package com.faishal.saku.ui.impianku
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
@@ -18,6 +19,7 @@ import com.faishal.saku.di.ImpiankuRepositoryInject
 import com.faishal.saku.presenter.impianku.ImpiankuContract
 import com.faishal.saku.presenter.impianku.ImpiankuPresenter
 import com.faishal.saku.ui.impianku.fragment.ScrapperDialogFragment
+import com.faishal.saku.util.SessionManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
@@ -51,6 +53,10 @@ class ImpiankuActivity : BaseActivity(), ImpiankuContract.impiankuView {
     private lateinit var fragmentManager: FragmentManager
     private lateinit var scrapperDialogFragment: ScrapperDialogFragment
 
+    private lateinit var sessionManager: SessionManager
+
+    private lateinit var pd: ProgressDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_impianku)
@@ -60,6 +66,8 @@ class ImpiankuActivity : BaseActivity(), ImpiankuContract.impiankuView {
     }
 
     private fun setView() {
+        sessionManager = SessionManager(this)
+
         fab_open = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_open)
         fab_close = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_close)
         fab_clock = AnimationUtils.loadAnimation(applicationContext, R.anim.fab_rotate_clock)
@@ -72,6 +80,11 @@ class ImpiankuActivity : BaseActivity(), ImpiankuContract.impiankuView {
         impiankuPresenter.onAttachView(this)
 
         scrapperDialogFragment = ScrapperDialogFragment.newInstance(this)
+
+        pd = ProgressDialog(this)
+        pd.setCancelable(false)
+        pd.setCanceledOnTouchOutside(false)
+        pd.setMessage("Loading")
     }
 
     @OnClick(R.id.btn_add_manual)
@@ -156,6 +169,21 @@ class ImpiankuActivity : BaseActivity(), ImpiankuContract.impiankuView {
     override fun onErrorScrapper(msg: String) {
         scrapperDialogFragment.clearData()
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onSuccessAddImpiankuShopee(msg: String) {
+        pd.dismiss()
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onErrorAddImpiankuShopee(msg: String) {
+        pd.dismiss()
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+    }
+
+    fun addImpiankuShopee(title: String, price: String, img: String, days: String, link: String) {
+        pd.show()
+        impiankuPresenter.addImpiankuShopee(sessionManager.getIdUser()!!, title, price, img, days, link)
     }
 
     fun loadScrapper(link: String) {
