@@ -1,5 +1,7 @@
 package com.faishal.saku.repository.impianku
 
+import java.io.File
+
 class ImpiankuRepository: ImpiankuDataResource {
 
     private var impiankuDataResource: ImpiankuDataResource
@@ -22,5 +24,16 @@ class ImpiankuRepository: ImpiankuDataResource {
         addImpiankuShopeeCallback: ImpiankuDataResource.AddImpiankuShopeeCallback
     ) {
         impiankuDataResource.addImpiankuShopee(idUser, title, price, img, days, link, addImpiankuShopeeCallback)
+    }
+
+    override fun addImpiankuManual(
+        idUser: String,
+        title: String,
+        price: String,
+        img: File,
+        days: String,
+        addImpiankuManualCallback: ImpiankuDataResource.AddImpiankuManualCallback
+    ) {
+        impiankuDataResource.addImpiankuManual(idUser, title, price, img, days, addImpiankuManualCallback)
     }
 }

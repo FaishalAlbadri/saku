@@ -3,6 +3,7 @@ package com.faishal.saku.presenter.impianku
 import com.faishal.saku.data.scrapper.ScrapperItem
 import com.faishal.saku.repository.impianku.ImpiankuDataResource
 import com.faishal.saku.repository.impianku.ImpiankuRepository
+import java.io.File
 
 class ImpiankuPresenter : ImpiankuContract.impiankuPresenter {
 
@@ -49,6 +50,31 @@ class ImpiankuPresenter : ImpiankuContract.impiankuPresenter {
 
                 override fun onErrorAddImpiankuShopee(msg: String) {
                     impiankuView.onErrorAddImpiankuShopee(msg)
+                }
+
+            })
+    }
+
+    override fun addImpiankuManual(
+        idUser: String,
+        title: String,
+        price: String,
+        img: File,
+        days: String
+    ) {
+        impiankuRepository.addImpiankuManual(
+            idUser,
+            title,
+            price,
+            img,
+            days,
+            object : ImpiankuDataResource.AddImpiankuManualCallback {
+                override fun onSuccessAddImpiankuManual(msg: String) {
+                    impiankuView.onSuccessAddImpiankuManual(msg)
+                }
+
+                override fun onErrorAddImpiankuManual(msg: String) {
+                    impiankuView.onErrorAddImpiankuManual(msg)
                 }
 
             })

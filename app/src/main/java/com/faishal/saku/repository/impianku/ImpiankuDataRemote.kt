@@ -1,16 +1,18 @@
 package com.faishal.saku.repository.impianku
 
 import android.content.Context
-import android.util.Log
 import com.faishal.saku.api.APIClient
 import com.faishal.saku.api.APIInterface
 import com.faishal.saku.api.Server
 import com.faishal.saku.data.BaseResponse
 import com.faishal.saku.data.scrapper.ScrapperItem
 import com.faishal.saku.data.scrapper.ScrapperResponse
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 
 class ImpiankuDataRemote : ImpiankuDataResource {
 
@@ -75,6 +77,47 @@ class ImpiankuDataRemote : ImpiankuDataResource {
 
             override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
                 addImpiankuShopeeCallback.onErrorAddImpiankuShopee(Server.CHECK_INTERNET_CONNECTION)
+            }
+
+        })
+    }
+
+    override fun addImpiankuManual(
+        idUser: String,
+        title: String,
+        price: String,
+        img: File,
+        days: String,
+        addImpiankuManualCallback: ImpiankuDataResource.AddImpiankuManualCallback
+    ) {
+        val map: MutableMap<String, RequestBody> = HashMap()
+        try {
+            val fileBody = RequestBody.create(MediaType.parse("image/*"), img)
+            map.put("impianku_img\"; filename=\"" + img.getName() + "\"", fileBody)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        map.put("id_user", RequestBody.create(MediaType.parse("text/plain"), idUser))
+        map.put("impianku_title", RequestBody.create(MediaType.parse("text/plain"), title))
+        map.put("impianku_price", RequestBody.create(MediaType.parse("text/plain"), price))
+        map.put("impianku_days", RequestBody.create(MediaType.parse("text/plain"), days))
+
+        baseResponseCall = apiInterface.addImpiankuManual(map)
+        baseResponseCall.enqueue(object : Callback<BaseResponse> {
+            override fun onResponse(call: Call<BaseResponse>, response: Response<BaseResponse>) {
+                try {
+                    if (response.body()!!.msg.equals("Berhasil")) {
+                        addImpiankuManualCallback.onSuccessAddImpiankuManual(response.body()!!.msg)
+                    } else {
+                        addImpiankuManualCallback.onErrorAddImpiankuManual(response.body()!!.msg)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+            override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
+                addImpiankuManualCallback.onErrorAddImpiankuManual(Server.CHECK_INTERNET_CONNECTION)
             }
 
         })

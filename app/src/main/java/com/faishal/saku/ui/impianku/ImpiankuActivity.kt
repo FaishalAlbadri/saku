@@ -1,6 +1,8 @@
 package com.faishal.saku.ui.impianku
 
+import android.Manifest.permission
 import android.app.ProgressDialog
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
@@ -8,6 +10,8 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -18,9 +22,11 @@ import com.faishal.saku.data.scrapper.ScrapperItem
 import com.faishal.saku.di.ImpiankuRepositoryInject
 import com.faishal.saku.presenter.impianku.ImpiankuContract
 import com.faishal.saku.presenter.impianku.ImpiankuPresenter
+import com.faishal.saku.ui.impianku.fragment.ImpiankuAddDialogFragment
 import com.faishal.saku.ui.impianku.fragment.ScrapperDialogFragment
 import com.faishal.saku.util.SessionManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.io.File
 
 
 class ImpiankuActivity : BaseActivity(), ImpiankuContract.impiankuView {
@@ -52,10 +58,13 @@ class ImpiankuActivity : BaseActivity(), ImpiankuContract.impiankuView {
     private lateinit var impiankuPresenter: ImpiankuPresenter
     private lateinit var fragmentManager: FragmentManager
     private lateinit var scrapperDialogFragment: ScrapperDialogFragment
+    private lateinit var impiankuAddDialogFragment: ImpiankuAddDialogFragment
 
     private lateinit var sessionManager: SessionManager
 
     private lateinit var pd: ProgressDialog
+
+    private val STORAGE_PERMISSION_CODE = 123
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,6 +89,7 @@ class ImpiankuActivity : BaseActivity(), ImpiankuContract.impiankuView {
         impiankuPresenter.onAttachView(this)
 
         scrapperDialogFragment = ScrapperDialogFragment.newInstance(this)
+        impiankuAddDialogFragment = ImpiankuAddDialogFragment.newInstance(this)
 
         pd = ProgressDialog(this)
         pd.setCancelable(false)
@@ -89,6 +99,7 @@ class ImpiankuActivity : BaseActivity(), ImpiankuContract.impiankuView {
 
     @OnClick(R.id.btn_add_manual)
     fun onBtnAddManualClicked() {
+        impiankuAddDialogFragment.show(fragmentManager, "")
         hideFAB()
     }
 
@@ -100,6 +111,7 @@ class ImpiankuActivity : BaseActivity(), ImpiankuContract.impiankuView {
 
     @OnClick(R.id.cv_add_manual)
     fun onCvAddManualClicked() {
+        impiankuAddDialogFragment.show(fragmentManager, "")
         hideFAB()
     }
 
@@ -181,13 +193,69 @@ class ImpiankuActivity : BaseActivity(), ImpiankuContract.impiankuView {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }
 
+    override fun onSuccessAddImpiankuManual(msg: String) {
+        pd.dismiss()
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onErrorAddImpiankuManual(msg: String) {
+        pd.dismiss()
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+    }
+
     fun addImpiankuShopee(title: String, price: String, img: String, days: String, link: String) {
         pd.show()
-        impiankuPresenter.addImpiankuShopee(sessionManager.getIdUser()!!, title, price, img, days, link)
+        impiankuPresenter.addImpiankuShopee(
+            sessionManager.getIdUser()!!,
+            title, price, img, days, link
+        )
+    }
+
+    fun addImpiankuManual(title: String, price: String, img: File, days: String) {
+        pd.show()
+        impiankuPresenter.addImpiankuManual(
+            sessionManager.getIdUser()!!,
+            title, price, img, days
+        )
     }
 
     fun loadScrapper(link: String) {
         impiankuPresenter.scrapper(link)
 
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == STORAGE_PERMISSION_CODE) {
+            if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            } else {
+                requestStoragePermission()
+            }
+        }
+    }
+
+    fun requestStoragePermission() {
+        if (ContextCompat
+                .checkSelfPermission(this, permission.READ_EXTERNAL_STORAGE)
+            == PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        if (ActivityCompat
+                .shouldShowRequestPermissionRationale(
+                    this,
+                    permission.READ_EXTERNAL_STORAGE
+                )
+        ) {
+        }
+        ActivityCompat
+            .requestPermissions(
+                this, arrayOf(permission.READ_EXTERNAL_STORAGE),
+                STORAGE_PERMISSION_CODE
+            )
     }
 }

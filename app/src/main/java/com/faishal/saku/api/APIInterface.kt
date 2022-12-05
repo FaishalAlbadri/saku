@@ -6,11 +6,10 @@ import com.faishal.saku.data.kategori.dana.KategoriDanaResponse
 import com.faishal.saku.data.news.NewsResponse
 import com.faishal.saku.data.pengeluaran.PengeluaranHariResponse
 import com.faishal.saku.data.scrapper.ScrapperResponse
-import retrofit2.http.POST
 import com.faishal.saku.data.user.UserResponse
+import okhttp3.RequestBody
 import retrofit2.Call
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
+import retrofit2.http.*
 
 interface APIInterface {
 
@@ -110,6 +109,12 @@ interface APIInterface {
         @Field("impianku_img") impianku_img: String,
         @Field("impianku_days") impianku_days: String,
         @Field("impianku_link_shopee") impianku_link_shopee: String
+    ): Call<BaseResponse>
+
+    @Multipart
+    @POST("impianku/add-manual")
+    fun addImpiankuManual(
+        @PartMap params: MutableMap<String, RequestBody>
     ): Call<BaseResponse>
 
 }
