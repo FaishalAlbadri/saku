@@ -14,6 +14,7 @@ import android.graphics.RectF;
 import android.media.MediaPlayer;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
@@ -50,7 +51,8 @@ final class WheelView extends View {
         textPaint.setColor(Color.WHITE);
         textPaint.setAntiAlias(true);
         textPaint.setDither(true);
-        textPaint.setTextSize(30);
+        textPaint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14,
+                getResources().getDisplayMetrics()));
         //rect rang of the arc
         range = new RectF(padding, padding, padding + radius, padding + radius);
     }
@@ -177,6 +179,31 @@ final class WheelView extends View {
         canvas.drawTextOnPath(text, path, hOffset, vOffset, textPaint);
     }
 
+    private void drawSecondaryText(Canvas canvas, float tmpAngle, String mStr) {
+        canvas.save();
+        int arraySize = mWheelItems.size();
+
+        float textWidth = textPaint.measureText(mStr);
+
+        float initFloat = (tmpAngle + 360f / arraySize / 2);
+        float angle = (float) (initFloat * Math.PI / 180);
+
+        int vOffset = (radius / 2 / 3) - 3;
+
+        int x = (int) (center + radius / 2 / 2 * Math.cos(angle));
+        int y = (int) (center + radius / 2 / 2 * Math.sin(angle));
+
+        RectF rect = new RectF(x + textWidth, y,
+                x - textWidth, y);
+
+        Path path = new Path();
+        path.addRect(rect, Path.Direction.CW);
+        path.close();
+        canvas.rotate(initFloat + (arraySize / 18f), x, y);
+        canvas.drawTextOnPath(mStr, path, vOffset / 7f, textPaint.getTextSize() / 2.75f, textPaint);
+        canvas.restore();
+    }
+
     /**
      * Function to rotate wheel to target
      *
@@ -263,8 +290,11 @@ final class WheelView extends View {
         for (int i = 0; i < mWheelItems.size(); i++) {
             archPaint.setColor(mWheelItems.get(i).color);
             canvas.drawArc(range, tempAngle, sweepAngle, true, archPaint);
-            drawImage(canvas, tempAngle, mWheelItems.get(i).bitmap);
-            drawText(canvas, tempAngle, sweepAngle, mWheelItems.get(i).text == null ? "" : mWheelItems.get(i).text);
+            if (mWheelItems.get(i).bitmap != null) {
+                drawImage(canvas, tempAngle, mWheelItems.get(i).bitmap);
+            }
+//            drawText(canvas, tempAngle, sweepAngle, mWheelItems.get(i).text == null ? "" : mWheelItems.get(i).text);
+            drawSecondaryText(canvas, tempAngle, mWheelItems.get(i).text == null ? "" : mWheelItems.get(i).text);
             tempAngle += sweepAngle;
         }
 

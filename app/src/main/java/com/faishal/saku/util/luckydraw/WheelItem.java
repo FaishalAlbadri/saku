@@ -19,4 +19,9 @@ public class WheelItem {
         this.text = text;
     }
 
+    public WheelItem(int color, String text) {
+        this.color = color;
+        this.bitmap = bitmap;
+        this.text = text;
+    }
 }

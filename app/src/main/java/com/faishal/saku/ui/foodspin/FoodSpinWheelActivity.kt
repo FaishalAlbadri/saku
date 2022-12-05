@@ -55,24 +55,17 @@ class FoodSpinWheelActivity : BaseActivity() {
 
     private fun setDataGacha() {
         foodItem.add(WheelItem(Color.parseColor("#fc6c6c"),
-            BitmapFactory.decodeResource(resources, R.drawable.orange),
             "Ayam"))
         foodItem.add(WheelItem(Color.parseColor("#00E6FF"),
-            BitmapFactory.decodeResource(resources, R.drawable.blank),
             "Bakso"))
         foodItem.add(WheelItem(Color.parseColor("#F00E6F"),
-            BitmapFactory.decodeResource(resources, R.drawable.orange),
             "Tahu Tempe"))
         foodItem.add(WheelItem(Color.parseColor("#00E6FF"),
-            BitmapFactory.decodeResource(resources, R.drawable.blank),
             "Mie"))
         foodItem.add(WheelItem(Color.parseColor("#fc6c6c"),
-            BitmapFactory.decodeResource(resources, R.drawable.orange),
             "Telur"))
         foodItem.add(WheelItem(Color.parseColor("#00E6FF"),
-            BitmapFactory.decodeResource(resources, R.drawable.blank),
             "Daging Sapi"))
-
 
         swFood.addWheelItems(foodItem, MediaPlayer.create(this, R.raw.luckyspin))
 
