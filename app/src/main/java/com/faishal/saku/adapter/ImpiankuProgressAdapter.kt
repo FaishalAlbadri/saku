@@ -1,5 +1,6 @@
 package com.faishal.saku.adapter
 
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
@@ -56,8 +57,8 @@ class ImpiankuProgressAdapter : RecyclerView.Adapter<ImpiankuProgressAdapter.Vie
         holder.txtPercent.setText(percent.toInt().toString() + "%")
         holder.txtUang.setText(Util.currencyRupiah(money) + " / " + Util.currencyRupiah(price))
 
-        holder.barImpianku.setProgress(percent.toInt())
         holder.barImpianku.max = 100
+        ObjectAnimator.ofInt(holder.barImpianku, "progress", percent.toInt()).setDuration(500).start()
 
         holder.btnImpianku.setOnClickListener {
             Toast.makeText(context, dataImpianku.impiankuTitle, Toast.LENGTH_SHORT).show()
