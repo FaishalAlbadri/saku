@@ -241,19 +241,24 @@ class ImpiankuAddDialogFragment(impiankuActivity: ImpiankuActivity) : DialogFrag
             Toast.makeText(activity, "Data ada yang masih kosong!", Toast.LENGTH_SHORT).show()
         } else {
             if (isImageAvailable) {
-                val imgfile = File(Util.getImagePath(filepathimg, impiankuActivity))
-                if (imgfile.toString().equals("") || imgfile.toString().isEmpty()) {
+                try {
+                    val imgfile = File(Util.getImagePath(filepathimg, impiankuActivity))
+                    if (imgfile.toString().equals("") || imgfile.toString().isEmpty()) {
+                        Toast.makeText(activity, "Gambar tidak dapat di upload!", Toast.LENGTH_SHORT).show()
+                    } else {
+                        hideKeyboard()
+                        xHari  = xHari * edtTime.text.toString().toInt()
+                        impiankuActivity.addImpiankuManual(
+                            edtNamaProduk.text.toString(),
+                            edtHargaProduk.text.toString(),
+                            imgfile,
+                            xHari.toString()
+                        )
+                        clearData()
+                        dismiss()
+                    }
+                } catch (e: Exception) {
                     Toast.makeText(activity, "Gambar tidak dapat di upload!", Toast.LENGTH_SHORT).show()
-                } else {
-                    hideKeyboard()
-                    impiankuActivity.addImpiankuManual(
-                        edtNamaProduk.text.toString(),
-                        edtHargaProduk.text.toString(),
-                        imgfile,
-                        edtTime.text.toString()
-                    )
-                    clearData()
-                    dismiss()
                 }
             } else {
                 Toast.makeText(activity, "Wajib memilih gambar!", Toast.LENGTH_SHORT).show()

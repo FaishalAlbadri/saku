@@ -7,6 +7,7 @@ object Server {
     const val BASE_URL_IMG = BASE_URL + "assets/"
     const val BASE_URL_IMG_USER = BASE_URL_IMG + "user/"
     const val BASE_URL_IMG_NEWS = BASE_URL_IMG + "news/"
+    const val BASE_URL_IMG_IMPIANKU = BASE_URL_IMG + "impianku/"
     const val CHECK_INTERNET_CONNECTION = "Check your internet connection"
 
     const val ADS_ID_APP = "ca-app-pub-3011092338336796~3385709768"

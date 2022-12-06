@@ -1,12 +1,17 @@
 package com.faishal.saku.repository.impianku
 
 import androidx.annotation.NonNull
+import com.faishal.saku.data.impianku.ImpiankuFinishedItem
+import com.faishal.saku.data.impianku.ImpiankuProgressItem
 import com.faishal.saku.data.scrapper.ScrapperItem
 import java.io.File
 
 interface ImpiankuDataResource {
 
     fun scrapper(link: String, @NonNull scrapperCallback: ScrapperCallback)
+
+    fun impianku(idUser: String, @NonNull impiankuGetCallback: ImpiankuGetCallback)
+
     fun addImpiankuShopee(
         idUser: String,
         title: String,
@@ -25,6 +30,16 @@ interface ImpiankuDataResource {
         days: String,
         @NonNull addImpiankuManualCallback: AddImpiankuManualCallback
     )
+
+    interface ImpiankuGetCallback {
+        fun onSuccessGetImpianku(
+            progressListItem: List<ImpiankuProgressItem>,
+            finishedListItem: List<ImpiankuFinishedItem>,
+            msg: String
+        )
+
+        fun onErrorGetImpianku(msg: String)
+    }
 
     interface ScrapperCallback {
         fun onSuccessScrapper(scrapperListItem: List<ScrapperItem>, msg: String)

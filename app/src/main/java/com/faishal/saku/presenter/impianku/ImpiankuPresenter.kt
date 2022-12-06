@@ -1,5 +1,7 @@
 package com.faishal.saku.presenter.impianku
 
+import com.faishal.saku.data.impianku.ImpiankuFinishedItem
+import com.faishal.saku.data.impianku.ImpiankuProgressItem
 import com.faishal.saku.data.scrapper.ScrapperItem
 import com.faishal.saku.repository.impianku.ImpiankuDataResource
 import com.faishal.saku.repository.impianku.ImpiankuRepository
@@ -12,6 +14,23 @@ class ImpiankuPresenter : ImpiankuContract.impiankuPresenter {
 
     constructor(impiankuRepository: ImpiankuRepository) {
         this.impiankuRepository = impiankuRepository
+    }
+
+    override fun impianku(idUser: String) {
+        impiankuRepository.impianku(idUser, object : ImpiankuDataResource.ImpiankuGetCallback {
+            override fun onSuccessGetImpianku(
+                progressListItem: List<ImpiankuProgressItem>,
+                finishedListItem: List<ImpiankuFinishedItem>,
+                msg: String
+            ) {
+                impiankuView.onSuccessGetImpianku(progressListItem, finishedListItem, msg)
+            }
+
+            override fun onErrorGetImpianku(msg: String) {
+                impiankuView.onErrorGetImpianku(msg)
+            }
+
+        })
     }
 
 

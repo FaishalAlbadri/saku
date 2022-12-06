@@ -194,6 +194,7 @@ class ScrapperDialogFragment(impiankuActivity: ImpiankuActivity) : DialogFragmen
             Toast.makeText(activity, "Data ada yang masih kosong!", Toast.LENGTH_SHORT).show()
         } else {
             hideKeyboard()
+            xHari  = xHari * edtTime.text.toString().toInt()
             impiankuActivity.addImpiankuShopee(edtNamaProduk.text.toString(), hargaProduk.toString(), image, xHari.toString(), linkshopee)
             clearData()
             dismiss()

@@ -1,12 +1,21 @@
 package com.faishal.saku.presenter.impianku
 
 import com.faishal.saku.base.BasePresenter
+import com.faishal.saku.data.impianku.ImpiankuFinishedItem
+import com.faishal.saku.data.impianku.ImpiankuProgressItem
 import com.faishal.saku.data.scrapper.ScrapperItem
 import java.io.File
 
 class ImpiankuContract {
 
     interface impiankuView {
+        fun onSuccessGetImpianku(
+            progressListItem: List<ImpiankuProgressItem>,
+            finishedListItem: List<ImpiankuFinishedItem>,
+            msg: String
+        )
+
+        fun onErrorGetImpianku(msg: String)
         fun onSuccessScrapper(scrapperListItem: List<ScrapperItem>, msg: String)
         fun onErrorScrapper(msg: String)
         fun onSuccessAddImpiankuShopee(msg: String)
@@ -16,6 +25,8 @@ class ImpiankuContract {
     }
 
     interface impiankuPresenter : BasePresenter<impiankuView> {
+        fun impianku(idUser: String)
+
         fun scrapper(link: String)
 
         fun addImpiankuShopee(

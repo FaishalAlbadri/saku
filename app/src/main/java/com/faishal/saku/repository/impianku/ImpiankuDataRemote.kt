@@ -5,6 +5,9 @@ import com.faishal.saku.api.APIClient
 import com.faishal.saku.api.APIInterface
 import com.faishal.saku.api.Server
 import com.faishal.saku.data.BaseResponse
+import com.faishal.saku.data.impianku.ImpiankuFinishedItem
+import com.faishal.saku.data.impianku.ImpiankuProgressItem
+import com.faishal.saku.data.impianku.ImpiankuResponse
 import com.faishal.saku.data.scrapper.ScrapperItem
 import com.faishal.saku.data.scrapper.ScrapperResponse
 import okhttp3.MediaType
@@ -18,6 +21,7 @@ class ImpiankuDataRemote : ImpiankuDataResource {
 
     private var apiInterface: APIInterface
     private lateinit var scrapperResponseCall: Call<ScrapperResponse>
+    private lateinit var impiankuResponseCall: Call<ImpiankuResponse>
     private lateinit var baseResponseCall: Call<BaseResponse>
 
     constructor(context: Context) {
@@ -47,6 +51,37 @@ class ImpiankuDataRemote : ImpiankuDataResource {
 
             override fun onFailure(call: Call<ScrapperResponse>, t: Throwable) {
                 scrapperCallback.onErrorScrapper(Server.CHECK_INTERNET_CONNECTION)
+            }
+
+        })
+    }
+
+    override fun impianku(
+        idUser: String,
+        impiankuGetCallback: ImpiankuDataResource.ImpiankuGetCallback
+    ) {
+        impiankuResponseCall = apiInterface.impianku(idUser)
+        impiankuResponseCall.enqueue(object : Callback<ImpiankuResponse> {
+            override fun onResponse(
+                call: Call<ImpiankuResponse>,
+                response: Response<ImpiankuResponse>
+            ) {
+                try {
+                    if (response.body()!!.msg.equals("Berhasil")) {
+                        val impiankuResponse: ImpiankuResponse = response.body()!!
+                        val impiankuProgressItem: List<ImpiankuProgressItem> = impiankuResponse.impiankuProgress
+                        val impiankuFinishedItem: List<ImpiankuFinishedItem> = impiankuResponse.impiankuFinished
+                        impiankuGetCallback.onSuccessGetImpianku(impiankuProgressItem, impiankuFinishedItem, response.body()!!.msg)
+                    } else {
+                        impiankuGetCallback.onErrorGetImpianku("Tidak ada data impianku")
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+            override fun onFailure(call: Call<ImpiankuResponse>, t: Throwable) {
+                impiankuGetCallback.onErrorGetImpianku(Server.CHECK_INTERNET_CONNECTION)
             }
 
         })

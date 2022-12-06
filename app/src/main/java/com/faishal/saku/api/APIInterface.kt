@@ -2,6 +2,7 @@ package com.faishal.saku.api
 
 import com.faishal.saku.data.BaseResponse
 import com.faishal.saku.data.catatan.CatatanResponse
+import com.faishal.saku.data.impianku.ImpiankuResponse
 import com.faishal.saku.data.kategori.dana.KategoriDanaResponse
 import com.faishal.saku.data.news.NewsResponse
 import com.faishal.saku.data.pengeluaran.PengeluaranHariResponse
@@ -93,6 +94,12 @@ interface APIInterface {
     fun pengeluaranDelete(
         @Field("id_catatan_item") id_catatan_item: String
     ): Call<BaseResponse>
+
+    @FormUrlEncoded
+    @POST("impianku/get")
+    fun impianku(
+        @Field("id_user") id_user: String
+    ): Call<ImpiankuResponse>
 
     @FormUrlEncoded
     @POST("impianku/shoope-produk")

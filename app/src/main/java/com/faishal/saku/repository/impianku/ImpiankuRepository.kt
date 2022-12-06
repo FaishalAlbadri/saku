@@ -14,6 +14,13 @@ class ImpiankuRepository: ImpiankuDataResource {
         impiankuDataResource.scrapper(link, scrapperCallback)
     }
 
+    override fun impianku(
+        idUser: String,
+        impiankuGetCallback: ImpiankuDataResource.ImpiankuGetCallback
+    ) {
+        impiankuDataResource.impianku(idUser, impiankuGetCallback)
+    }
+
     override fun addImpiankuShopee(
         idUser: String,
         title: String,
