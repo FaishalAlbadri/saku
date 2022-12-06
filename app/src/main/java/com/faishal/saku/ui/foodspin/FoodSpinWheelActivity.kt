@@ -85,4 +85,9 @@ class FoodSpinWheelActivity : BaseActivity() {
     fun onBtnBackClicked() {
         onBackPressed()
     }
+
+    override fun onBackPressed() {
+        swFood.stopSound()
+        super.onBackPressed()
+    }
 }

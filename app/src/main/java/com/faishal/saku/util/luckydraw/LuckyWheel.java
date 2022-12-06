@@ -88,6 +88,10 @@ public class LuckyWheel extends FrameLayout implements View.OnTouchListener, OnR
         Log.i("gacha angka", target + "");
     }
 
+    public void stopSound() {
+        mediaPlayer.stop();
+    }
+
     /**
      * Function to rotate wheel to degree
      *
