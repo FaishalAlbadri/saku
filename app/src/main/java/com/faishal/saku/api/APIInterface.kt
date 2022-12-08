@@ -102,6 +102,18 @@ interface APIInterface {
     ): Call<ImpiankuResponse>
 
     @FormUrlEncoded
+    @POST("impianku/quest/")
+    fun questImpianku(
+        @Field("id_user") id_user: String
+    ): Call<ImpiankuResponse>
+
+    @FormUrlEncoded
+    @POST("impianku/quest/update")
+    fun updateQuestImpianku(
+        @Field("id_impianku") id_impianku: String
+    ): Call<BaseResponse>
+
+    @FormUrlEncoded
     @POST("impianku/shoope-produk")
     fun scrapperShoope(
         @Field("link") link: String

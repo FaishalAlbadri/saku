@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
@@ -56,19 +57,27 @@ class PengeluaranAdapter : RecyclerView.Adapter<PengeluaranAdapter.ViewHolder> {
             override fun onMenuItemClick(item: MenuItem): Boolean {
                 when (item.itemId) {
                     R.id.edit -> {
-                        (context as PengeluaranActivity).showEditDialog(
-                            dataPengeluaranItem.idCatatanItem,
-                            dataPengeluaranItem.catatanItemHarga,
-                            dataPengeluaranItem.catatanItemDesc
-                        )
+                        if (dataPengeluaranItem.idImpianku.equals("0")) {
+                            (context as PengeluaranActivity).showEditDialog(
+                                dataPengeluaranItem.idCatatanItem,
+                                dataPengeluaranItem.catatanItemHarga,
+                                dataPengeluaranItem.catatanItemDesc
+                            )
+                        } else {
+                            Toast.makeText(context, "Data tidak bisa di edit", Toast.LENGTH_SHORT).show()
+                        }
                         return true
                     }
 
                     R.id.delete -> {
-                        (context as PengeluaranActivity).showDeleteDialog(
-                            dataPengeluaranItem.idCatatanItem,
-                            dataPengeluaranItem.catatanItemDesc
-                        )
+                        if (dataPengeluaranItem.idImpianku.equals("0")) {
+                            (context as PengeluaranActivity).showDeleteDialog(
+                                dataPengeluaranItem.idCatatanItem,
+                                dataPengeluaranItem.catatanItemDesc
+                            )
+                        }else {
+                            Toast.makeText(context, "Data tidak bisa di hapus", Toast.LENGTH_SHORT).show()
+                        }
                         return true
                     }
                 }

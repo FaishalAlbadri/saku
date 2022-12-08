@@ -4,16 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="2dp"
-    android:layout_marginTop="4dp"
-    android:layout_marginRight="2dp"
-    android:layout_marginBottom="4dp"
+    android:layout_margin="8dp"
     app:cardCornerRadius="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/btn_impianku"
         android:layout_width="match_parent"
-        android:background="?attr/selectableItemBackground"
         android:layout_height="wrap_content">
 
         <ImageView
@@ -22,7 +17,7 @@
             android:layout_height="0dp"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintDimensionRatio="4:5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -34,9 +29,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginRight="16dp"
             android:ellipsize="end"
-            android:maxLines="2"
-            android:lines="2"
-            android:gravity="bottom"
+            android:maxLines="1"
             android:text="Samsung Galaxy a52s"
             android:textColor="@color/primary_dark"
             android:textSize="15sp"
@@ -50,6 +43,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:maxLines="1"
             android:text="Rp. 129.000.000 / 200.000.000"
             android:textColor="@android:color/black"
             android:textSize="12sp"
@@ -57,15 +51,14 @@
             app:layout_constraintRight_toRightOf="@+id/txt_impianku"
             app:layout_constraintTop_toBottomOf="@+id/txt_impianku" />
 
+
         <ProgressBar
             android:id="@+id/bar_impianku"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="16dp"
             android:progressDrawable="@drawable/bg_progressbar"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="@+id/txt_impianku"
             app:layout_constraintRight_toRightOf="@+id/txt_impianku"
             app:layout_constraintTop_toBottomOf="@+id/txt_uang" />
@@ -74,17 +67,60 @@
             android:id="@+id/txt_percent"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_margin="2dp"
+            android:gravity="center"
             android:text="50%"
             android:textColor="@android:color/white"
             android:textSize="9sp"
             android:textStyle="bold"
-            android:gravity="center"
-            android:layout_margin="2dp"
             app:layout_constraintBottom_toBottomOf="@+id/bar_impianku"
             app:layout_constraintLeft_toLeftOf="@+id/bar_impianku"
             app:layout_constraintRight_toRightOf="@+id/bar_impianku"
             app:layout_constraintTop_toTopOf="@+id/bar_impianku" />
 
+        <TextView
+            android:id="@+id/btn_skip"
+            android:layout_width="0dp"
+            android:layout_height="28dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_btn_rounded_primary"
+            android:foreground="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="Skip"
+            android:textAllCaps="true"
+            android:textColor="@color/primary_dark"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintLeft_toLeftOf="@+id/txt_impianku"
+            app:layout_constraintRight_toLeftOf="@+id/btn_menabung"
+            app:layout_constraintTop_toBottomOf="@+id/bar_impianku" />
+
+        <TextView
+            android:id="@+id/btn_menabung"
+            android:layout_width="0dp"
+            android:layout_height="28dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_button_primary_dark"
+            android:foreground="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="Menabung"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_weight="2"
+            app:layout_constraintLeft_toRightOf="@+id/btn_skip"
+            app:layout_constraintRight_toRightOf="@+id/txt_impianku"
+            app:layout_constraintTop_toBottomOf="@+id/bar_impianku" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

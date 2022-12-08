@@ -25,17 +25,23 @@ import com.faishal.saku.api.Server
 import com.faishal.saku.base.BaseActivity
 import com.faishal.saku.data.catatan.CatatanItem
 import com.faishal.saku.data.catatan.UserItem
+import com.faishal.saku.data.impianku.ImpiankuProgressItem
 import com.faishal.saku.data.news.NewsItem
 import com.faishal.saku.di.CatatanRepositoryInject
 import com.faishal.saku.di.NewsRepositoryInject
+import com.faishal.saku.di.QuestImpiankuRepositoryInject
 import com.faishal.saku.presenter.catatan.CatatanContract
 import com.faishal.saku.presenter.catatan.CatatanPresenter
+import com.faishal.saku.presenter.impianku.ImpiankuPresenter
 import com.faishal.saku.presenter.news.NewsContract
 import com.faishal.saku.presenter.news.NewsPresenter
+import com.faishal.saku.presenter.quest.QuestImpiankuContract
+import com.faishal.saku.presenter.quest.QuestImpiankuPresenter
 import com.faishal.saku.ui.aboutus.AboutUsActivity
 import com.faishal.saku.ui.berita.BeritaActivity
 import com.faishal.saku.ui.foodspin.FoodSpinWheelActivity
 import com.faishal.saku.ui.home.fragment.AddCatatanFragment
+import com.faishal.saku.ui.home.fragment.QuestImpiankuDialogFragment
 import com.faishal.saku.ui.impianku.ImpiankuActivity
 import com.faishal.saku.ui.profile.ProfileActivity
 import com.faishal.saku.util.SessionManager
@@ -46,7 +52,8 @@ import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import java.util.*
 
 
-class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.newsView {
+class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.newsView,
+    QuestImpiankuContract.questImpiankuView {
 
     @BindView(R.id.txt_date)
     lateinit var txtDate: TextView
@@ -76,6 +83,7 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
     lateinit var refreshHome: SwipeRefreshLayout
 
     private lateinit var pd: ProgressDialog
+    private lateinit var quesImpiankuPresenter: QuestImpiankuPresenter
     private lateinit var catatanPresenter: CatatanPresenter
     private lateinit var newPresenter: NewsPresenter
     private lateinit var sessionManager: SessionManager
@@ -83,10 +91,15 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
     private lateinit var newsAdapter: NewsAdapter
     private var catatanItem: ArrayList<CatatanItem> = ArrayList()
     private var newsItem: ArrayList<NewsItem> = ArrayList()
+    var questImpiankuItem: ArrayList<ImpiankuProgressItem> = ArrayList()
 
     private lateinit var fragmentManager: FragmentManager
+    private lateinit var questImpiankuDialogFragment: QuestImpiankuDialogFragment
 
     private var mRewardedAd: RewardedAd? = null
+
+    private var loadQuest = true
+    private var positionDeleteQuest = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,6 +128,13 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
 
         newPresenter = NewsPresenter(NewsRepositoryInject.provideTo(this))
         newPresenter.onAttachView(this)
+
+        quesImpiankuPresenter =
+            QuestImpiankuPresenter(QuestImpiankuRepositoryInject.provideTo(this))
+        quesImpiankuPresenter.onAttachView(this)
+
+        questImpiankuDialogFragment = QuestImpiankuDialogFragment.newInstance(this)
+
 
         newPresenter.news("6")
 
@@ -189,8 +209,13 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
         popupMenu.menuInflater.inflate(R.menu.home, popupMenu.menu)
         popupMenu.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
             override fun onMenuItemClick(item: MenuItem?): Boolean {
-                when(item!!.itemId) {
-                    R.id.aboutus -> startActivity(Intent(applicationContext, AboutUsActivity::class.java))
+                when (item!!.itemId) {
+                    R.id.aboutus -> startActivity(
+                        Intent(
+                            applicationContext,
+                            AboutUsActivity::class.java
+                        )
+                    )
                 }
                 return true
             }
@@ -225,6 +250,11 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
         dateS: String,
         msg: String
     ) {
+        if (loadQuest) {
+            pd.show()
+            quesImpiankuPresenter.questImpianku(sessionManager.getIdUser()!!)
+            loadQuest = false
+        }
         refreshHome.setRefreshing(false)
         pd.cancel()
         txtDate.setText(dateS)
@@ -268,5 +298,37 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
 
     override fun onErrorNews(msg: String) {
         newPresenter.news("5")
+    }
+
+    override fun onSuccessGetQuestImpianku(
+        progressListItem: List<ImpiankuProgressItem>,
+        msg: String
+    ) {
+        pd.dismiss()
+        questImpiankuItem.clear()
+        questImpiankuItem.addAll(progressListItem)
+        if (questImpiankuItem.size > 0) {
+            questImpiankuDialogFragment.show(fragmentManager, "")
+        }
+    }
+
+    override fun onErrorGetQuestImpianku(msg: String) {
+        pd.dismiss()
+    }
+
+    override fun onSuccessUpdateQuestImpianku(msg: String) {
+        pd.dismiss()
+        questImpiankuDialogFragment.deleteQuest(positionDeleteQuest)
+    }
+
+    override fun onErrorUpdateQuestImpianku(msg: String) {
+        pd.dismiss()
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+    }
+
+    fun updateQuest(idImpianku: String, position: Int) {
+        pd.show()
+        positionDeleteQuest = position
+        quesImpiankuPresenter.updateQuestImpianku(idImpianku)
     }
 }
