@@ -126,10 +126,11 @@ class ImpiankuAddDialogFragment(impiankuActivity: ImpiankuActivity) : DialogFrag
                             .toBigInteger() > zero.toBigInteger() && edtHargaProduk.text.toString()
                             .toBigInteger() > zero.toBigInteger()
                     ) {
-                        var hargaPerHari =
-                            edtHargaProduk.text.toString().toBigInteger() / (edtTime.text.toString()
-                                .toBigInteger() * xHari.toBigInteger())
-                        txtMenabungValue.setText(Util.currencyRupiah(hargaPerHari.toString()))
+                        val hargaProduk = edtHargaProduk.text.toString()
+                        val time = edtTime.text.toString()
+                        val hari = xHari
+                        val hargaPerHari = Math.ceil(hargaProduk.toDouble() / (time.toInt() * hari))
+                        txtMenabungValue.setText(Util.currencyRupiah(hargaPerHari.toInt()))
                     }
                 } else {
                     txtMenabungValue.text = ""

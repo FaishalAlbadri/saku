@@ -70,7 +70,5 @@
 
     <string name="alamat_uii">Jl. Kaliurang No.Km. 14,5, Krawitan, Umbulmartani, Kec. Ngemplak, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55584</string>
     <string name="detail_app">Saku adalah aplikasi saran keuangan yang ditujukan untuk mahasiswa atau mahasiswa supaya dapat mengatur keuangan bulanan mereka.</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

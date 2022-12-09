@@ -2,6 +2,7 @@ package com.faishal.saku.adapter
 
 import android.animation.ObjectAnimator
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ import com.bumptech.glide.request.transition.Transition
 import com.faishal.saku.R
 import com.faishal.saku.api.Server
 import com.faishal.saku.data.impianku.ImpiankuFinishedItem
+import com.faishal.saku.ui.impianku.ImpiankuDetailActivity
 import com.faishal.saku.util.Util
 import org.jetbrains.annotations.NotNull
 
@@ -61,7 +63,10 @@ class ImpiankuFinishAdapter : RecyclerView.Adapter<ImpiankuFinishAdapter.ViewHol
         ObjectAnimator.ofInt(holder.barImpianku, "progress", percent.toInt()).setDuration(500).start()
 
         holder.btnImpianku.setOnClickListener {
-            Toast.makeText(context, dataImpianku.impiankuTitle, Toast.LENGTH_SHORT).show()
+            context.startActivity(
+                Intent(context, ImpiankuDetailActivity::class.java)
+                    .putExtra("id_impianku" , dataImpianku.idImpianku)
+            )
         }
     }
 

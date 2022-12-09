@@ -21,6 +21,13 @@ class ImpiankuRepository: ImpiankuDataResource {
         impiankuDataResource.impianku(idUser, impiankuGetCallback)
     }
 
+    override fun detailImpianku(
+        idImpianku: String,
+        detailImpiankuGetCallback: ImpiankuDataResource.DetailImpiankuGetCallback
+    ) {
+        impiankuDataResource.detailImpianku(idImpianku, detailImpiankuGetCallback)
+    }
+
     override fun addImpiankuShopee(
         idUser: String,
         title: String,

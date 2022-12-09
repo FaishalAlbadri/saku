@@ -94,8 +94,10 @@ class ScrapperDialogFragment(impiankuActivity: ImpiankuActivity) : DialogFragmen
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (!edtTime.text!!.toString().equals("")) {
                     if (edtTime.text.toString().toInt() > 0) {
-                        var hargaPerHari = hargaProduk / (edtTime.text.toString().toInt() * xHari)
-                        txtMenabungValue.setText(Util.currencyRupiah(hargaPerHari))
+                        val time = edtTime.text.toString()
+                        val hari = xHari
+                        val hargaPerHari = Math.ceil(hargaProduk.toDouble() / (time.toInt() * hari))
+                        txtMenabungValue.setText(Util.currencyRupiah(hargaPerHari.toInt()))
                     }
                 } else {
                     txtMenabungValue.text = ""

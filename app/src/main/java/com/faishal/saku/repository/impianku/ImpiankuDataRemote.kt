@@ -8,6 +8,7 @@ import com.faishal.saku.data.BaseResponse
 import com.faishal.saku.data.impianku.ImpiankuFinishedItem
 import com.faishal.saku.data.impianku.ImpiankuProgressItem
 import com.faishal.saku.data.impianku.ImpiankuResponse
+import com.faishal.saku.data.impianku.detail.ImpiankuDetailResponse
 import com.faishal.saku.data.scrapper.ScrapperItem
 import com.faishal.saku.data.scrapper.ScrapperResponse
 import okhttp3.MediaType
@@ -23,6 +24,7 @@ class ImpiankuDataRemote : ImpiankuDataResource {
     private lateinit var scrapperResponseCall: Call<ScrapperResponse>
     private lateinit var impiankuResponseCall: Call<ImpiankuResponse>
     private lateinit var baseResponseCall: Call<BaseResponse>
+    private lateinit var impiankuDetailResponseCall: Call<ImpiankuDetailResponse>
 
     constructor(context: Context) {
         apiInterface = APIClient.getRetrofit(context)!!.create(APIInterface::class.java)
@@ -69,9 +71,15 @@ class ImpiankuDataRemote : ImpiankuDataResource {
                 try {
                     if (response.body()!!.msg.equals("Berhasil")) {
                         val impiankuResponse: ImpiankuResponse = response.body()!!
-                        val impiankuProgressItem: List<ImpiankuProgressItem> = impiankuResponse.impiankuProgress
-                        val impiankuFinishedItem: List<ImpiankuFinishedItem> = impiankuResponse.impiankuFinished
-                        impiankuGetCallback.onSuccessGetImpianku(impiankuProgressItem, impiankuFinishedItem, response.body()!!.msg)
+                        val impiankuProgressItem: List<ImpiankuProgressItem> =
+                            impiankuResponse.impiankuProgress
+                        val impiankuFinishedItem: List<ImpiankuFinishedItem> =
+                            impiankuResponse.impiankuFinished
+                        impiankuGetCallback.onSuccessGetImpianku(
+                            impiankuProgressItem,
+                            impiankuFinishedItem,
+                            response.body()!!.msg
+                        )
                     } else {
                         impiankuGetCallback.onErrorGetImpianku("Tidak ada data impianku")
                     }
@@ -82,6 +90,41 @@ class ImpiankuDataRemote : ImpiankuDataResource {
 
             override fun onFailure(call: Call<ImpiankuResponse>, t: Throwable) {
                 impiankuGetCallback.onErrorGetImpianku(Server.CHECK_INTERNET_CONNECTION)
+            }
+
+        })
+    }
+
+    override fun detailImpianku(
+        idImpianku: String,
+        detailImpiankuGetCallback: ImpiankuDataResource.DetailImpiankuGetCallback
+    ) {
+        impiankuDetailResponseCall = apiInterface.detailImpianku(idImpianku)
+        impiankuDetailResponseCall.enqueue(object : Callback<ImpiankuDetailResponse> {
+            override fun onResponse(
+                call: Call<ImpiankuDetailResponse>,
+                response: Response<ImpiankuDetailResponse>
+            ) {
+                try {
+                    if (response.body()!!.msg.equals("Berhasil")) {
+                        val impiankuDetailResponse = response.body()!!
+                        val impiankuItem = impiankuDetailResponse.impianku
+                        val pengeluaranHariItem = impiankuDetailResponse.pengeluaranHari
+                        detailImpiankuGetCallback.onSuccessGetDetailImpianku(
+                            impiankuItem,
+                            pengeluaranHariItem,
+                            response.body()!!.msg
+                        )
+                    } else {
+                        detailImpiankuGetCallback.onErrorGetDetailImpianku(response.body()!!.msg)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+            override fun onFailure(call: Call<ImpiankuDetailResponse>, t: Throwable) {
+                detailImpiankuGetCallback.onErrorGetDetailImpianku(Server.CHECK_INTERNET_CONNECTION)
             }
 
         })

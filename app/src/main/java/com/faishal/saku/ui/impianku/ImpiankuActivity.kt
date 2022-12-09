@@ -27,6 +27,8 @@ import com.faishal.saku.adapter.ImpiankuProgressAdapter
 import com.faishal.saku.base.BaseActivity
 import com.faishal.saku.data.impianku.ImpiankuFinishedItem
 import com.faishal.saku.data.impianku.ImpiankuProgressItem
+import com.faishal.saku.data.impianku.detail.ImpiankuItem
+import com.faishal.saku.data.impianku.detail.PengeluaranHariItem
 import com.faishal.saku.data.scrapper.ScrapperItem
 import com.faishal.saku.di.ImpiankuRepositoryInject
 import com.faishal.saku.presenter.impianku.ImpiankuContract
@@ -302,6 +304,14 @@ class ImpiankuActivity : BaseActivity(), ImpiankuContract.impiankuView {
         pd.dismiss()
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }
+
+    override fun onSuccessGetDetailImpianku(
+        impiankuListItem: List<ImpiankuItem>,
+        pengeluaranHariListItem: List<PengeluaranHariItem>,
+        msg: String
+    ) {}
+
+    override fun onErrorGetDetailImpianku(msg: String) {}
 
     fun addImpiankuShopee(title: String, price: String, img: String, days: String, link: String) {
         pd.show()

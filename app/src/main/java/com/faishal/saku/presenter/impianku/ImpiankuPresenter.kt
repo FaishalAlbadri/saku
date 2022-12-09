@@ -2,6 +2,8 @@ package com.faishal.saku.presenter.impianku
 
 import com.faishal.saku.data.impianku.ImpiankuFinishedItem
 import com.faishal.saku.data.impianku.ImpiankuProgressItem
+import com.faishal.saku.data.impianku.detail.ImpiankuItem
+import com.faishal.saku.data.impianku.detail.PengeluaranHariItem
 import com.faishal.saku.data.scrapper.ScrapperItem
 import com.faishal.saku.repository.impianku.ImpiankuDataResource
 import com.faishal.saku.repository.impianku.ImpiankuRepository
@@ -31,6 +33,29 @@ class ImpiankuPresenter : ImpiankuContract.impiankuPresenter {
             }
 
         })
+    }
+
+    override fun detailImpianku(idImpianku: String) {
+        impiankuRepository.detailImpianku(
+            idImpianku,
+            object : ImpiankuDataResource.DetailImpiankuGetCallback {
+                override fun onSuccessGetDetailImpianku(
+                    impiankuListItem: List<ImpiankuItem>,
+                    pengeluaranHariListItem: List<PengeluaranHariItem>,
+                    msg: String
+                ) {
+                    impiankuView.onSuccessGetDetailImpianku(
+                        impiankuListItem,
+                        pengeluaranHariListItem,
+                        msg
+                    )
+                }
+
+                override fun onErrorGetDetailImpianku(msg: String) {
+                    impiankuView.onErrorGetDetailImpianku(msg)
+                }
+
+            })
     }
 
 

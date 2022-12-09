@@ -52,12 +52,12 @@ class QuestImpiankuAdapter : RecyclerView.Adapter<QuestImpiankuAdapter.ViewHolde
         var price = dataImpianku.impiankuPrice.toInt()
         var money = dataImpianku.impiankuMoneyCollected.toInt()
         var percent: Double = (money.toDouble() / price.toDouble()) * 100
-        var moneyPerDays = price / dataImpianku.impiankuDays.toInt()
+        var moneyPerDays = Math.ceil(price.toDouble() / dataImpianku.impiankuDays.toDouble())
 
         holder.txtImpianku.setText(dataImpianku.impiankuTitle)
         holder.txtPercent.setText(percent.toInt().toString() + "%")
         holder.txtUang.setText(Util.currencyRupiah(money) + " / " + Util.currencyRupiah(price))
-        holder.btnMenabung.setText(Util.currencyRupiah(moneyPerDays))
+        holder.btnMenabung.setText(Util.currencyRupiah(moneyPerDays.toInt()))
 
         holder.barImpianku.max = 100
         ObjectAnimator.ofInt(holder.barImpianku, "progress", percent.toInt()).setDuration(500)

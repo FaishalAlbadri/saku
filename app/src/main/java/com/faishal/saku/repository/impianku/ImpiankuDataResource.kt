@@ -3,6 +3,8 @@ package com.faishal.saku.repository.impianku
 import androidx.annotation.NonNull
 import com.faishal.saku.data.impianku.ImpiankuFinishedItem
 import com.faishal.saku.data.impianku.ImpiankuProgressItem
+import com.faishal.saku.data.impianku.detail.ImpiankuItem
+import com.faishal.saku.data.impianku.detail.PengeluaranHariItem
 import com.faishal.saku.data.scrapper.ScrapperItem
 import java.io.File
 
@@ -11,6 +13,8 @@ interface ImpiankuDataResource {
     fun scrapper(link: String, @NonNull scrapperCallback: ScrapperCallback)
 
     fun impianku(idUser: String, @NonNull impiankuGetCallback: ImpiankuGetCallback)
+
+    fun detailImpianku(idImpianku: String, @NonNull detailImpiankuGetCallback: DetailImpiankuGetCallback)
 
     fun addImpiankuShopee(
         idUser: String,
@@ -54,5 +58,15 @@ interface ImpiankuDataResource {
     interface AddImpiankuManualCallback {
         fun onSuccessAddImpiankuManual(msg: String)
         fun onErrorAddImpiankuManual(msg: String)
+    }
+
+    interface DetailImpiankuGetCallback {
+        fun onSuccessGetDetailImpianku(
+            impiankuListItem: List<ImpiankuItem>,
+            pengeluaranHariListItem: List<PengeluaranHariItem>,
+            msg: String
+        )
+
+        fun onErrorGetDetailImpianku(msg: String)
     }
 }

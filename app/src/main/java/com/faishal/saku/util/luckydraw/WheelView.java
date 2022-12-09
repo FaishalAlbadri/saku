@@ -25,7 +25,7 @@ import com.faishal.saku.R;
 import java.util.List;
 
 
-final class WheelView extends View {
+public final class WheelView extends View {
     private RectF range = new RectF();
     private Paint archPaint, textPaint;
     private int padding, radius, center, mWheelBackground, mImagePadding;

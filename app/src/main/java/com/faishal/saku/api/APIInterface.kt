@@ -3,6 +3,7 @@ package com.faishal.saku.api
 import com.faishal.saku.data.BaseResponse
 import com.faishal.saku.data.catatan.CatatanResponse
 import com.faishal.saku.data.impianku.ImpiankuResponse
+import com.faishal.saku.data.impianku.detail.ImpiankuDetailResponse
 import com.faishal.saku.data.kategori.dana.KategoriDanaResponse
 import com.faishal.saku.data.news.NewsResponse
 import com.faishal.saku.data.pengeluaran.PengeluaranHariResponse
@@ -100,6 +101,12 @@ interface APIInterface {
     fun impianku(
         @Field("id_user") id_user: String
     ): Call<ImpiankuResponse>
+
+    @FormUrlEncoded
+    @POST("impianku/detail")
+    fun detailImpianku(
+        @Field("id_impianku") id_impianku: String
+    ): Call<ImpiankuDetailResponse>
 
     @FormUrlEncoded
     @POST("impianku/quest/")
