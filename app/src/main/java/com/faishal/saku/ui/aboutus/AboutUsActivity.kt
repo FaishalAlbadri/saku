@@ -43,11 +43,11 @@ class AboutUsActivity : BaseActivity() {
             .circleCrop()
             .into(imgRizan)
         Glide.with(this)
-            .load(getImage("ic_logo"))
+            .load(getImage("raffry"))
             .circleCrop()
             .into(imgRaffry)
         Glide.with(this)
-            .load(getImage("ic_logo"))
+            .load(getImage("ijal"))
             .circleCrop()
             .into(imgIjal)
     }
