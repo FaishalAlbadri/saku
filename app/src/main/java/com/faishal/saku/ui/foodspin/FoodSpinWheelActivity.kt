@@ -32,6 +32,25 @@ class FoodSpinWheelActivity : BaseActivity() {
     private var foodItem: MutableList<WheelItem> = ArrayList()
     private var points: Int = 0
 
+    private val namaMakanan = arrayOf(
+        "Cumi", "Telur", "Ayam",
+        "Kerang", "Buah", "Udang", "Sate Kelinci",
+        "Nasi Goreng", "Bubur", "Kepiting",
+        "Bakso", "Soto", "Pizza",
+        "Sayur",
+        "Sapi", "Mie", "Ketoprak",
+        "Roti", "Kambing", "Ikan"
+    )
+    private val warnaMakanan = arrayOf(
+        "#F00E6F", "#00E6FF", "#fc6c6c",
+        "#F00E6F", "#17CF61", "#F00E6F", "#EAD309",
+        "#fc6c6c", "#00E6FF", "#F00E6F",
+        "#00E6FF", "#fc6c6c", "#F00E6F",
+        "#17CF61",
+        "#F00E6F", "#00E6FF", "#fc6c6c",
+        "#00E6FF", "#F00E6F", "#fc6c6c"
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_food_spin_wheel)
@@ -54,18 +73,14 @@ class FoodSpinWheelActivity : BaseActivity() {
     }
 
     private fun setDataGacha() {
-        foodItem.add(WheelItem(Color.parseColor("#fc6c6c"),
-            "Ayam"))
-        foodItem.add(WheelItem(Color.parseColor("#00E6FF"),
-            "Bakso"))
-        foodItem.add(WheelItem(Color.parseColor("#F00E6F"),
-            "Tahu Tempe"))
-        foodItem.add(WheelItem(Color.parseColor("#00E6FF"),
-            "Mie"))
-        foodItem.add(WheelItem(Color.parseColor("#fc6c6c"),
-            "Telur"))
-        foodItem.add(WheelItem(Color.parseColor("#00E6FF"),
-            "Daging Sapi"))
+        for (i in 0..namaMakanan.size - 1) {
+            foodItem.add(
+                WheelItem(
+                    Color.parseColor(warnaMakanan[i]),
+                    namaMakanan[i]
+                )
+            )
+        }
 
         swFood.addWheelItems(foodItem, MediaPlayer.create(this, R.raw.luckyspin))
 

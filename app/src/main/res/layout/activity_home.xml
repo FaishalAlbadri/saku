@@ -221,7 +221,7 @@
                     android:layout_marginTop="4dp"
                     android:gravity="center"
                     android:maxLines="1"
-                    android:text="Hmm?"
+                    android:text="Makan"
                     android:textColor="@android:color/black"
                     android:textSize="15sp"
                     android:textStyle="bold"
