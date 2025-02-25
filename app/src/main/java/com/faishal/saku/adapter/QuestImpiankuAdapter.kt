@@ -11,13 +11,12 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.faishal.saku.R
 import com.faishal.saku.api.Server
 import com.faishal.saku.data.impianku.ImpiankuProgressItem
+import com.faishal.saku.databinding.ItemQuestImpiankuBinding
 import com.faishal.saku.ui.home.fragment.QuestImpiankuDialogFragment
 import com.faishal.saku.util.Util
 import org.jetbrains.annotations.NotNull
@@ -35,68 +34,44 @@ class QuestImpiankuAdapter : RecyclerView.Adapter<QuestImpiankuAdapter.ViewHolde
         this.questImpiankuDialogFragment = questImpiankuDialogFragment
     }
 
+    inner class ViewHolder(val binding: ItemQuestImpiankuBinding) : RecyclerView.ViewHolder(binding.root)
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_quest_impianku, parent, false)
-        return ViewHolder(view)
+        val binding = ItemQuestImpiankuBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val dataImpianku: ImpiankuProgressItem = listImpianku.get(position)
+        with(holder) {
+            binding.apply {
+                Glide.with(context)
+                    .load(Server.BASE_URL_IMG_IMPIANKU + dataImpianku.impiankuImg)
+                    .apply(RequestOptions().centerCrop())
+                    .into(imgImpianku)
 
-        Glide.with(context)
-            .load(Server.BASE_URL_IMG_IMPIANKU + dataImpianku.impiankuImg)
-            .apply(RequestOptions().centerCrop())
-            .into(holder.imgImpianku)
+                var price = dataImpianku.impiankuPrice.toInt()
+                var money = dataImpianku.impiankuMoneyCollected.toInt()
+                var percent: Double = (money.toDouble() / price.toDouble()) * 100
+                var moneyPerDays = Math.ceil(price.toDouble() / dataImpianku.impiankuDays.toDouble())
 
-        var price = dataImpianku.impiankuPrice.toInt()
-        var money = dataImpianku.impiankuMoneyCollected.toInt()
-        var percent: Double = (money.toDouble() / price.toDouble()) * 100
-        var moneyPerDays = Math.ceil(price.toDouble() / dataImpianku.impiankuDays.toDouble())
+                txtImpianku.setText(dataImpianku.impiankuTitle)
+                txtPercent.setText(percent.toInt().toString() + "%")
+                txtUang.setText(Util.currencyRupiah(money) + " / " + Util.currencyRupiah(price))
+                btnMenabung.setText(Util.currencyRupiah(moneyPerDays.toInt()))
 
-        holder.txtImpianku.setText(dataImpianku.impiankuTitle)
-        holder.txtPercent.setText(percent.toInt().toString() + "%")
-        holder.txtUang.setText(Util.currencyRupiah(money) + " / " + Util.currencyRupiah(price))
-        holder.btnMenabung.setText(Util.currencyRupiah(moneyPerDays.toInt()))
+                barImpianku.max = 100
+                ObjectAnimator.ofInt(barImpianku, "progress", percent.toInt()).setDuration(500)
+                    .start()
 
-        holder.barImpianku.max = 100
-        ObjectAnimator.ofInt(holder.barImpianku, "progress", percent.toInt()).setDuration(500)
-            .start()
+                btnSkip.setOnClickListener {
+                    delete(position)
+                }
 
-        holder.btnSkip.setOnClickListener {
-            delete(position)
-        }
-
-        holder.btnMenabung.setOnClickListener {
-            questImpiankuDialogFragment.updateQuest(dataImpianku.idImpianku, position)
-        }
-    }
-
-    class ViewHolder(@NotNull itemView: View) : RecyclerView.ViewHolder(itemView) {
-        @BindView(R.id.img_impianku)
-        lateinit var imgImpianku: ImageView
-
-        @BindView(R.id.txt_percent)
-        lateinit var txtPercent: TextView
-
-        @BindView(R.id.txt_uang)
-        lateinit var txtUang: TextView
-
-        @BindView(R.id.txt_impianku)
-        lateinit var txtImpianku: TextView
-
-        @BindView(R.id.btn_menabung)
-        lateinit var btnMenabung: TextView
-
-        @BindView(R.id.btn_skip)
-        lateinit var btnSkip: TextView
-
-        @BindView(R.id.bar_impianku)
-        lateinit var barImpianku: ProgressBar
-
-
-        init {
-            ButterKnife.bind(this, itemView)
+                btnMenabung.setOnClickListener {
+                    questImpiankuDialogFragment.updateQuest(dataImpianku.idImpianku, position)
+                }
+            }
         }
     }
 

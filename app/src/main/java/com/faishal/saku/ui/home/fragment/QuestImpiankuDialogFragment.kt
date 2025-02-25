@@ -7,26 +7,16 @@ import android.graphics.drawable.InsetDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.ImageView
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
 import com.faishal.saku.R
 import com.faishal.saku.adapter.QuestImpiankuAdapter
 import com.faishal.saku.data.impianku.ImpiankuProgressItem
+import com.faishal.saku.databinding.FragmentQuestImpiankuDialogBinding
 import com.faishal.saku.ui.home.HomeActivity
 import java.util.ArrayList
 
 class QuestImpiankuDialogFragment(homeActivity: HomeActivity) : DialogFragment() {
-
-    @BindView(R.id.btn_close)
-    lateinit var btnClose: ImageView
-
-    @BindView(R.id.rv_quest)
-    lateinit var rvQuest: RecyclerView
 
     private val homeActivity: HomeActivity = homeActivity
     private var questImpiankuItem: ArrayList<ImpiankuProgressItem> = ArrayList()
@@ -38,26 +28,35 @@ class QuestImpiankuDialogFragment(homeActivity: HomeActivity) : DialogFragment()
         }
     }
 
+    private var _binding: FragmentQuestImpiankuDialogBinding? = null
+    val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_quest_impianku_dialog, container, false)
-        ButterKnife.bind(this, view)
+        _binding = FragmentQuestImpiankuDialogBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        questImpiankuAdapter = QuestImpiankuAdapter(
-            requireActivity().applicationContext, questImpiankuItem,
-            this
-        )
-        rvQuest.setLayoutManager(LinearLayoutManager(activity))
-        rvQuest.adapter = questImpiankuAdapter
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.apply {
+            questImpiankuAdapter = QuestImpiankuAdapter(
+                requireActivity().applicationContext, questImpiankuItem,
+                this@QuestImpiankuDialogFragment
+            )
+            rvQuest.setLayoutManager(LinearLayoutManager(activity))
+            rvQuest.adapter = questImpiankuAdapter
 
-        questImpiankuAdapter.delete()
-        questImpiankuItem.clear()
-        questImpiankuItem.addAll(homeActivity.questImpiankuItem)
-        questImpiankuAdapter.notifyDataSetChanged()
+            questImpiankuAdapter.delete()
+            questImpiankuItem.clear()
+            questImpiankuItem.addAll(homeActivity.questImpiankuItem)
+            questImpiankuAdapter.notifyDataSetChanged()
 
-        return view
+            btnClose.setOnClickListener {
+                dismiss()
+            }
+        }
     }
 
     override fun onStart() {
@@ -80,11 +79,6 @@ class QuestImpiankuDialogFragment(homeActivity: HomeActivity) : DialogFragment()
         dialog.window!!.requestFeature(Window.FEATURE_NO_TITLE)
         setCancelable(false)
         return dialog
-    }
-
-    @OnClick(R.id.btn_close)
-    fun onBtnCloseClicked() {
-        dismiss()
     }
 
     fun updateQuest(idImpianku: String, position: Int) {

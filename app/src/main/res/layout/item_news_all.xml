@@ -21,8 +21,7 @@
             app:layout_constraintDimensionRatio="7:3"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/card_1_jan" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/txt_date"
@@ -36,8 +35,7 @@
             android:paddingRight="8dp"
             android:textColor="#A5A5A5"
             android:textSize="11sp"
-            app:layout_constraintTop_toBottomOf="@+id/img_news"
-            tools:text="Senin, 29 Desember 2022" />
+            app:layout_constraintTop_toBottomOf="@+id/img_news" />
 
         <TextView
             android:id="@+id/txt_judul"
@@ -54,8 +52,7 @@
             android:paddingBottom="6dp"
             android:textColor="@color/black"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/img_news"
-            tools:text="7 Cara Menabung Untuk Mahasiswa dan Anak Kos" />
+            app:layout_constraintBottom_toBottomOf="@+id/img_news" />
 
         <TextView
             android:id="@+id/txt_desc"
@@ -71,8 +68,7 @@
             android:paddingBottom="8dp"
             android:textColor="#707070"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_date"
-            tools:text="@string/lorem_ipsum" />
+            app:layout_constraintTop_toBottomOf="@+id/txt_date"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

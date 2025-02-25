@@ -8,14 +8,12 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
 import com.faishal.saku.R
 import com.faishal.saku.adapter.NewsAdapter
 import com.faishal.saku.adapter.NewsAllAdapter
 import com.faishal.saku.base.BaseActivity
 import com.faishal.saku.data.news.NewsItem
+import com.faishal.saku.databinding.ActivityBeritaBinding
 import com.faishal.saku.di.NewsRepositoryInject
 import com.faishal.saku.presenter.news.NewsContract
 import com.faishal.saku.presenter.news.NewsPresenter
@@ -23,40 +21,34 @@ import com.faishal.saku.util.Util
 
 class BeritaActivity : BaseActivity(), NewsContract.newsView {
 
-    @BindView(R.id.btn_back)
-    lateinit var btnBack: ImageView
-
-    @BindView(R.id.rv_news)
-    lateinit var rvNews: RecyclerView
-
-    @BindView(R.id.refresh_news)
-    lateinit var refreshNews: SwipeRefreshLayout
-
     private lateinit var pd: ProgressDialog
     private lateinit var newPresenter: NewsPresenter
     private lateinit var newsAdapter: NewsAllAdapter
     private var newsItem: ArrayList<NewsItem> = ArrayList()
 
+    private var _binding: ActivityBeritaBinding? = null
+    val binding get() = _binding!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_berita)
-        ButterKnife.bind(this)
+        _binding = ActivityBeritaBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setView()
     }
 
     private fun setView() {
         newsAdapter = NewsAllAdapter(this, newsItem)
-        rvNews.setLayoutManager(LinearLayoutManager(this))
-        rvNews.setAdapter(newsAdapter)
+        binding.rvNews.setLayoutManager(LinearLayoutManager(this))
+        binding.rvNews.setAdapter(newsAdapter)
 
         newPresenter = NewsPresenter(NewsRepositoryInject.provideTo(this))
         newPresenter.onAttachView(this)
 
         newPresenter.news("all")
 
-        Util.refreshColor(refreshNews)
-        refreshNews.setOnRefreshListener {
+        Util.refreshColor(binding.refreshNews)
+        binding.refreshNews.setOnRefreshListener {
             newPresenter.news("all")
         }
 
@@ -65,15 +57,14 @@ class BeritaActivity : BaseActivity(), NewsContract.newsView {
         pd.setCanceledOnTouchOutside(false)
         pd.setMessage("Loading")
         pd.show()
-    }
 
-    @OnClick(R.id.btn_back)
-    fun onBtnBackClicked() {
-        onBackPressed()
+        binding.btnBack.setOnClickListener {
+            onBackPressed()
+        }
     }
 
     override fun onSuccessNews(newsListItem: List<NewsItem>, msg: String) {
-        refreshNews.setRefreshing(false)
+        binding.refreshNews.setRefreshing(false)
         pd.cancel()
         newsAdapter.delete()
         newsItem.clear()
@@ -82,7 +73,7 @@ class BeritaActivity : BaseActivity(), NewsContract.newsView {
     }
 
     override fun onErrorNews(msg: String) {
-        refreshNews.setRefreshing(false)
+        binding.refreshNews.setRefreshing(false)
         pd.cancel()
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }

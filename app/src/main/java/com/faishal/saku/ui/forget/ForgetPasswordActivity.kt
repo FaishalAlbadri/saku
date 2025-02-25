@@ -6,39 +6,35 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
 import com.faishal.saku.R
 import com.faishal.saku.base.BaseActivity
+import com.faishal.saku.databinding.ActivityForgetPasswordBinding
 import com.rengwuxian.materialedittext.MaterialEditText
 
 class ForgetPasswordActivity : BaseActivity() {
 
-    @BindView(R.id.btn_forget_password)
-    lateinit var btnForgetPassword: Button
-
-    @BindView(R.id.edt_email)
-    lateinit var edtEmail: MaterialEditText
+    private var _binding: ActivityForgetPasswordBinding? = null
+    val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_forget_password)
-        ButterKnife.bind(this)
-    }
+        _binding = ActivityForgetPasswordBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-    @OnClick(R.id.btn_forget_password)
-    fun onBtnForgetPasswordClicked() {
-        if (edtEmail.text.toString().isEmpty()) {
-            edtEmail.setError("Email masih kosong!")
-            edtEmail.requestFocus()
-        } else {
-            Toast.makeText(
-                this,
-                "Silahkan ubah passwordmu, link terkirim di email " + edtEmail.text.toString(),
-                Toast.LENGTH_SHORT
-            ).show()
-            onBackPressed()
+        binding.apply {
+            btnForgetPassword.setOnClickListener {
+                if (edtEmail.text.toString().isEmpty()) {
+                    edtEmail.setError("Email masih kosong!")
+                    edtEmail.requestFocus()
+                } else {
+                    Toast.makeText(
+                        this@ForgetPasswordActivity,
+                        "Silahkan ubah passwordmu, link terkirim di email " + edtEmail.text.toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    onBackPressed()
+                }
+            }
         }
     }
 

@@ -15,9 +15,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
 import com.faishal.saku.R
 import com.faishal.saku.adapter.HomeAdapter
 import com.faishal.saku.adapter.NewsAdapter
@@ -27,6 +24,7 @@ import com.faishal.saku.data.catatan.CatatanItem
 import com.faishal.saku.data.catatan.UserItem
 import com.faishal.saku.data.impianku.ImpiankuProgressItem
 import com.faishal.saku.data.news.NewsItem
+import com.faishal.saku.databinding.ActivityHomeBinding
 import com.faishal.saku.di.CatatanRepositoryInject
 import com.faishal.saku.di.NewsRepositoryInject
 import com.faishal.saku.di.QuestImpiankuRepositoryInject
@@ -55,33 +53,6 @@ import java.util.*
 class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.newsView,
     QuestImpiankuContract.questImpiankuView {
 
-    @BindView(R.id.txt_date)
-    lateinit var txtDate: TextView
-
-    @BindView(R.id.txt_username)
-    lateinit var txtUsername: TextView
-
-    @BindView(R.id.btn_more)
-    lateinit var btnMore: ImageView
-
-    @BindView(R.id.btn_food)
-    lateinit var btnFood: ConstraintLayout
-
-    @BindView(R.id.btn_news)
-    lateinit var btnNews: ConstraintLayout
-
-    @BindView(R.id.btn_impianku)
-    lateinit var btnImpianku: ConstraintLayout
-
-    @BindView(R.id.rv_laporan)
-    lateinit var rvLaporan: RecyclerView
-
-    @BindView(R.id.rv_news)
-    lateinit var rvNews: RecyclerView
-
-    @BindView(R.id.refresh_home)
-    lateinit var refreshHome: SwipeRefreshLayout
-
     private lateinit var pd: ProgressDialog
     private lateinit var quesImpiankuPresenter: QuestImpiankuPresenter
     private lateinit var catatanPresenter: CatatanPresenter
@@ -101,11 +72,13 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
     private var loadQuest = true
     private var positionDeleteQuest = 0
 
+    private var _binding: ActivityHomeBinding? = null
+    val binding get() = _binding!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
-        ButterKnife.bind(this)
-
+        _binding = ActivityHomeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setView()
     }
 
@@ -116,12 +89,12 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
         fragmentManager = supportFragmentManager
 
         newsAdapter = NewsAdapter(this, newsItem)
-        rvNews.setLayoutManager(LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false))
-        rvNews.setAdapter(newsAdapter)
+        binding.rvNews.setLayoutManager(LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false))
+        binding.rvNews.setAdapter(newsAdapter)
 
         homeAdapter = HomeAdapter(this, catatanItem)
-        rvLaporan.setLayoutManager(LinearLayoutManager(this))
-        rvLaporan.setAdapter(homeAdapter)
+        binding.rvLaporan.setLayoutManager(LinearLayoutManager(this))
+        binding.rvLaporan.setAdapter(homeAdapter)
 
         catatanPresenter = CatatanPresenter(CatatanRepositoryInject.provideTo(this))
         catatanPresenter.onAttachView(this)
@@ -138,8 +111,8 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
 
         newPresenter.news("6")
 
-        Util.refreshColor(refreshHome)
-        refreshHome.setOnRefreshListener {
+        Util.refreshColor(binding.refreshHome)
+        binding.refreshHome.setOnRefreshListener {
             newPresenter.news("6")
         }
 
@@ -148,11 +121,48 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
         pd.setCanceledOnTouchOutside(false)
         pd.setMessage("Loading")
         pd.show()
-    }
 
-    @OnClick(R.id.btn_add)
-    fun onBtnAddCatatanClicked() {
-        AddCatatanFragment.newInstance(this).show(fragmentManager, "")
+        binding.apply {
+            btnAdd.setOnClickListener {
+                AddCatatanFragment.newInstance(this@HomeActivity).show(fragmentManager, "")
+            }
+
+            btnMore.setOnClickListener {
+                val popupMenu = PopupMenu(this@HomeActivity, btnMore)
+                popupMenu.menuInflater.inflate(R.menu.home, popupMenu.menu)
+                popupMenu.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
+                    override fun onMenuItemClick(item: MenuItem?): Boolean {
+                        when (item!!.itemId) {
+                            R.id.aboutus -> startActivity(
+                                Intent(
+                                    applicationContext,
+                                    AboutUsActivity::class.java
+                                )
+                            )
+                        }
+                        return true
+                    }
+
+                })
+                popupMenu.show()
+            }
+
+            btnImpianku.setOnClickListener {
+                startActivity(Intent(applicationContext, ImpiankuActivity::class.java))
+            }
+
+            btnNews.setOnClickListener {
+                startActivity(Intent(applicationContext, BeritaActivity::class.java))
+            }
+
+            imgProfile.setOnClickListener {
+                startActivity(Intent(applicationContext, ProfileActivity::class.java))
+            }
+
+            btnFood.setOnClickListener {
+                startActivity(Intent(applicationContext, FoodSpinWheelActivity::class.java))
+            }
+        }
     }
 
     fun showAds(nominalPendapatan: String, monthCatatan: Int, yearCatatan: Int) {
@@ -203,77 +213,40 @@ class HomeActivity : BaseActivity(), CatatanContract.catatanView, NewsContract.n
         }
     }
 
-    @OnClick(R.id.btn_more)
-    fun onBtnMoreClicker() {
-        val popupMenu = PopupMenu(this, btnMore)
-        popupMenu.menuInflater.inflate(R.menu.home, popupMenu.menu)
-        popupMenu.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
-            override fun onMenuItemClick(item: MenuItem?): Boolean {
-                when (item!!.itemId) {
-                    R.id.aboutus -> startActivity(
-                        Intent(
-                            applicationContext,
-                            AboutUsActivity::class.java
-                        )
-                    )
-                }
-                return true
-            }
-
-        })
-        popupMenu.show()
-    }
-
-    @OnClick(R.id.btn_impianku)
-    fun onBtnImpiankuClicked() {
-        startActivity(Intent(applicationContext, ImpiankuActivity::class.java))
-    }
-
-    @OnClick(R.id.btn_news)
-    fun onBtnNewsClicked() {
-        startActivity(Intent(applicationContext, BeritaActivity::class.java))
-    }
-
-    @OnClick(R.id.img_profile)
-    fun onBtnProfileClicked() {
-        startActivity(Intent(applicationContext, ProfileActivity::class.java))
-    }
-
-    @OnClick(R.id.btn_food)
-    fun onBtnFoodClicked() {
-        startActivity(Intent(applicationContext, FoodSpinWheelActivity::class.java))
-    }
-
     override fun onSuccessCatatan(
         catatanListItem: List<CatatanItem>,
         userListItem: List<UserItem>,
         dateS: String,
         msg: String
     ) {
-        if (loadQuest) {
-            pd.show()
-            quesImpiankuPresenter.questImpianku(sessionManager.getIdUser()!!)
-            loadQuest = false
+        binding.apply {
+            if (loadQuest) {
+                pd.show()
+                quesImpiankuPresenter.questImpianku(sessionManager.getIdUser()!!)
+                loadQuest = false
+            }
+            refreshHome.setRefreshing(false)
+            pd.cancel()
+            txtDate.setText(dateS)
+            txtUsername.setText("Hi... " + userListItem!!.get(0)!!.userName)
+            homeAdapter.delete()
+            catatanItem.clear()
+            catatanItem.addAll(catatanListItem)
+            homeAdapter.notifyDataSetChanged()
         }
-        refreshHome.setRefreshing(false)
-        pd.cancel()
-        txtDate.setText(dateS)
-        txtUsername.setText("Hi... " + userListItem!!.get(0)!!.userName)
-        homeAdapter.delete()
-        catatanItem.clear()
-        catatanItem.addAll(catatanListItem)
-        homeAdapter.notifyDataSetChanged()
     }
 
     override fun onBlankCatatan(userListItem: List<UserItem>, dateS: String, msg: String) {
-        refreshHome.setRefreshing(false)
-        pd.cancel()
-        txtDate.setText(dateS)
-        txtUsername.setText("Hi... " + userListItem!!.get(0)!!.userName)
+        binding.apply {
+            refreshHome.setRefreshing(false)
+            pd.cancel()
+            txtDate.setText(dateS)
+            txtUsername.setText("Hi... " + userListItem!!.get(0)!!.userName)
+        }
     }
 
     override fun onErrorCatatan(msg: String) {
-        refreshHome.setRefreshing(false)
+        binding.refreshHome.setRefreshing(false)
         pd.cancel()
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }

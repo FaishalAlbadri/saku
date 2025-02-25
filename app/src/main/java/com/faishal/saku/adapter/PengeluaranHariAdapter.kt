@@ -7,12 +7,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.faishal.saku.R
 import com.faishal.saku.data.pengeluaran.PengeluaranHariItem
 import com.faishal.saku.data.pengeluaran.PengeluaranItem
-import org.jetbrains.annotations.NotNull
+import com.faishal.saku.databinding.ItemPengeluaranHariBinding
 
 class PengeluaranHariAdapter: RecyclerView.Adapter<PengeluaranHariAdapter.ViewHolder> {
 
@@ -26,39 +24,30 @@ class PengeluaranHariAdapter: RecyclerView.Adapter<PengeluaranHariAdapter.ViewHo
         this.listItem = list
     }
 
+    inner class ViewHolder(val binding: ItemPengeluaranHariBinding) : RecyclerView.ViewHolder(binding.root)
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_pengeluaran_hari, parent, false)
-        return ViewHolder(view)
+        val binding = ItemPengeluaranHariBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val dataPengeluaranHariItem: PengeluaranHariItem = listItem.get(position)
+        with(holder) {
+            binding.apply {
+                pengeluaranAdapter = PengeluaranAdapter(context, listPengeluaranItem)
+                rvPengeluaran.setLayoutManager(LinearLayoutManager(context))
+                rvPengeluaran.setAdapter(pengeluaranAdapter)
 
-        pengeluaranAdapter = PengeluaranAdapter(context, listPengeluaranItem)
-        holder.rvPengeluaran.setLayoutManager(LinearLayoutManager(context))
-        holder.rvPengeluaran.setAdapter(pengeluaranAdapter)
+                pengeluaranAdapter.delete()
+                listPengeluaranItem.clear()
+                listPengeluaranItem.addAll(dataPengeluaranHariItem.pengeluaran)
+                pengeluaranAdapter.notifyDataSetChanged()
 
-        pengeluaranAdapter.delete()
-        listPengeluaranItem.clear()
-        listPengeluaranItem.addAll(dataPengeluaranHariItem.pengeluaran)
-        pengeluaranAdapter.notifyDataSetChanged()
-
-        holder.txtDate.setText(dataPengeluaranHariItem.catatanItemCreate)
-    }
-
-    class ViewHolder(@NotNull itemView: View) : RecyclerView.ViewHolder(itemView) {
-        @BindView(R.id.txt_date)
-        lateinit var txtDate: TextView
-
-        @BindView(R.id.rv_pengeluaran)
-        lateinit var rvPengeluaran: RecyclerView
-
-        init {
-            ButterKnife.bind(this, itemView)
+                txtDate.setText(dataPengeluaranHariItem.catatanItemCreate)
+            }
         }
     }
-
     override fun getItemCount(): Int {
         return listItem.size
     }

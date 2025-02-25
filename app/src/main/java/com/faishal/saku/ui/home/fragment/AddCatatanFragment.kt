@@ -8,30 +8,14 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.*
 import androidx.fragment.app.DialogFragment
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
 import com.faishal.saku.R
+import com.faishal.saku.databinding.FragmentAddCatatanBinding
 import com.faishal.saku.ui.home.HomeActivity
 import com.rengwuxian.materialedittext.MaterialEditText
 import java.util.*
 
 class AddCatatanFragment(homeActivity: HomeActivity) : DialogFragment() {
 
-    @BindView(R.id.edt_pendapatan)
-    lateinit var edtPendapatan: MaterialEditText
-
-    @BindView(R.id.spinner_month)
-    lateinit var spinnerMonth: Spinner
-
-    @BindView(R.id.spinner_year)
-    lateinit var spinnerYear: Spinner
-
-    @BindView(R.id.btn_close)
-    lateinit var btnClose: ImageView
-
-    @BindView(R.id.btn_send)
-    lateinit var btnSend: ImageView
 
     private val homeActivity: HomeActivity = homeActivity
     private var monthCatatan: Int = 0
@@ -43,16 +27,19 @@ class AddCatatanFragment(homeActivity: HomeActivity) : DialogFragment() {
         }
     }
 
+    private var _binding: FragmentAddCatatanBinding? = null
+    val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view: View = inflater.inflate(R.layout.fragment_add_catatan, container, false)
-        ButterKnife.bind(this, view)
+        _binding = FragmentAddCatatanBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         spinnerSet()
-
-        return view
     }
 
     private fun spinnerSet() {
@@ -68,50 +55,65 @@ class AddCatatanFragment(homeActivity: HomeActivity) : DialogFragment() {
 
         val positionYear = thisYear - 2020
 
-        spinnerMonth.adapter = ArrayAdapter(
-            activity?.applicationContext!!,
-            android.R.layout.simple_spinner_dropdown_item,
-            bulanStringArray
-        )
-        spinnerYear.adapter = ArrayAdapter(
-            activity?.applicationContext!!,
-            android.R.layout.simple_spinner_dropdown_item,
-            tahunStringArray
-        )
-        spinnerMonth.setSelection(thisMonth)
-        spinnerYear.setSelection(positionYear)
+        binding.apply {
+            spinnerMonth.adapter = ArrayAdapter(
+                activity?.applicationContext!!,
+                android.R.layout.simple_spinner_dropdown_item,
+                bulanStringArray
+            )
+            spinnerYear.adapter = ArrayAdapter(
+                activity?.applicationContext!!,
+                android.R.layout.simple_spinner_dropdown_item,
+                tahunStringArray
+            )
+            spinnerMonth.setSelection(thisMonth)
+            spinnerYear.setSelection(positionYear)
 
-        spinnerMonth.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                monthCatatan = position + 1
-            }
+            spinnerMonth.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    monthCatatan = position + 1
+                }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
+                override fun onNothingSelected(parent: AdapterView<*>?) {
 
-            }
-
-        }
-
-        spinnerYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                val yearS: String = tahunStringArray[position]
-                yearCatatan = yearS.toInt()
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
+                }
 
             }
 
+            spinnerYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    val yearS: String = tahunStringArray[position]
+                    yearCatatan = yearS.toInt()
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                }
+
+            }
+
+            btnClose.setOnClickListener {
+                dismiss()
+            }
+
+            btnSend.setOnClickListener {
+                if (edtPendapatan.text.toString().isEmpty()) {
+                    Toast.makeText(activity, "Nominal Pendapatan Masih Kosong!", Toast.LENGTH_SHORT).show()
+                } else {
+                    dismiss()
+                    homeActivity.showAds(edtPendapatan.text.toString(), monthCatatan, yearCatatan)
+                }
+            }
         }
     }
 
@@ -130,20 +132,5 @@ class AddCatatanFragment(homeActivity: HomeActivity) : DialogFragment() {
         dialog.window!!.requestFeature(Window.FEATURE_NO_TITLE)
         setCancelable(false)
         return dialog
-    }
-
-    @OnClick(R.id.btn_close)
-    fun onBtnCloseClicked() {
-        dismiss()
-    }
-
-    @OnClick(R.id.btn_send)
-    fun onBtnSendClicked() {
-        if (edtPendapatan.text.toString().isEmpty()) {
-            Toast.makeText(activity, "Nominal Pendapatan Masih Kosong!", Toast.LENGTH_SHORT).show()
-        } else {
-            dismiss()
-            homeActivity.showAds(edtPendapatan.text.toString(), monthCatatan, yearCatatan)
-        }
     }
 }

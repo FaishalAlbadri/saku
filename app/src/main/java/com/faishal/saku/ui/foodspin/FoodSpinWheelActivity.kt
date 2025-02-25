@@ -8,26 +8,15 @@ import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
 import com.faishal.saku.R
 import com.faishal.saku.base.BaseActivity
+import com.faishal.saku.databinding.ActivityFoodSpinWheelBinding
 import com.faishal.saku.util.luckydraw.LuckyWheel
 import com.faishal.saku.util.luckydraw.OnLuckyWheelReachTheTarget
 import com.faishal.saku.util.luckydraw.WheelItem
 import java.util.*
 
 class FoodSpinWheelActivity : BaseActivity() {
-
-    @BindView(R.id.btn_back)
-    lateinit var btnBack: ImageView
-
-    @BindView(R.id.sw_food)
-    lateinit var swFood: LuckyWheel
-
-    @BindView(R.id.txt_makan)
-    lateinit var txtMakan: TextView
 
     private var foodItem: MutableList<WheelItem> = ArrayList()
     private var points: Int = 0
@@ -50,26 +39,34 @@ class FoodSpinWheelActivity : BaseActivity() {
         "#F00E6F", "#00E6FF", "#fc6c6c",
         "#00E6FF", "#F00E6F", "#fc6c6c"
     )
+    private var _binding: ActivityFoodSpinWheelBinding? = null
+    val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_food_spin_wheel)
-        ButterKnife.bind(this)
+        _binding = ActivityFoodSpinWheelBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setDataGacha()
         setView()
 
     }
 
     private fun setView() {
-        swFood.setLuckyWheelReachTheTarget(object : OnLuckyWheelReachTheTarget {
-            override fun onReachTarget() {
-                val dataFood: WheelItem = foodItem.get(points - 1)
-                val namaMakanan = dataFood.text
-                txtMakan.setText("Yeay.. Sepertinya kamu akan makan '" + namaMakanan + "'")
-                randomData()
-                swFood.setTarget(points)
+        binding.apply {
+            swFood.setLuckyWheelReachTheTarget(object : OnLuckyWheelReachTheTarget {
+                override fun onReachTarget() {
+                    val dataFood: WheelItem = foodItem.get(points - 1)
+                    val namaMakanan = dataFood.text
+                    txtMakan.setText("Yeay.. Sepertinya kamu akan makan '" + namaMakanan + "'")
+                    randomData()
+                    swFood.setTarget(points)
+                }
+            })
+
+            btnBack.setOnClickListener {
+                onBackPressed()
             }
-        })
+        }
     }
 
     private fun setDataGacha() {
@@ -82,10 +79,12 @@ class FoodSpinWheelActivity : BaseActivity() {
             )
         }
 
-        swFood.addWheelItems(foodItem, MediaPlayer.create(this, R.raw.luckyspin))
+        binding.apply {
+            swFood.addWheelItems(foodItem, MediaPlayer.create(this@FoodSpinWheelActivity, R.raw.luckyspin))
 
-        randomData()
-        swFood.setTarget(points)
+            randomData()
+            swFood.setTarget(points)
+        }
     }
 
     private fun randomData() {
@@ -96,13 +95,8 @@ class FoodSpinWheelActivity : BaseActivity() {
         }
     }
 
-    @OnClick(R.id.btn_back)
-    fun onBtnBackClicked() {
-        onBackPressed()
-    }
-
     override fun onBackPressed() {
-        swFood.stopSound()
+        binding.swFood.stopSound()
         super.onBackPressed()
     }
 }

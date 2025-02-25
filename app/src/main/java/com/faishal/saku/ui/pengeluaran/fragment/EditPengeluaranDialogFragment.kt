@@ -10,10 +10,8 @@ import android.view.Window
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
 import com.faishal.saku.R
+import com.faishal.saku.databinding.FragmentEditPengeluaranDialogBinding
 import com.faishal.saku.ui.pengeluaran.PengeluaranActivity
 import com.rengwuxian.materialedittext.MaterialEditText
 
@@ -23,18 +21,6 @@ class EditPengeluaranDialogFragment(
     nominalPengeluaran: String,
     descPengeluaran: String
 ) : DialogFragment() {
-
-    @BindView(R.id.btn_close)
-    lateinit var btnClose: ImageView
-
-    @BindView(R.id.btn_send)
-    lateinit var btnSend: ImageView
-
-    @BindView(R.id.edt_nominal)
-    lateinit var edtNominal: MaterialEditText
-
-    @BindView(R.id.edt_desc)
-    lateinit var edtDesc: MaterialEditText
 
     private val pengeluaranActivity = pengeluaranActivity
 
@@ -58,19 +44,37 @@ class EditPengeluaranDialogFragment(
         }
     }
 
+    private var _binding: FragmentEditPengeluaranDialogBinding? = null
+    val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        val view: View =
-            inflater.inflate(R.layout.fragment_edit_pengeluaran_dialog, container, false)
-        ButterKnife.bind(this, view)
-
-        edtDesc.setText(descPengeluaran)
-        edtNominal.setText(nominalPengeluaran)
-        return view
+        _binding = FragmentEditPengeluaranDialogBinding.inflate(inflater, container, false)
+        return binding.root
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.apply {
+            edtDesc.setText(descPengeluaran)
+            edtNominal.setText(nominalPengeluaran)
+
+            btnClose.setOnClickListener {
+                dismiss()
+            }
+
+            btnSend.setOnClickListener {
+                if (edtDesc.text.toString().isEmpty() || edtNominal.text.toString().isEmpty()) {
+                    Toast.makeText(activity, "Data Tidak Boleh Kosong!", Toast.LENGTH_SHORT).show()
+                } else {
+                    dismiss()
+                    pengeluaranActivity.editPengeluaran(idPengeluaran, edtNominal.text.toString(), edtDesc.text.toString())
+                }
+            }
+        }
+    }
+
 
     override fun onStart() {
         super.onStart()
@@ -87,20 +91,5 @@ class EditPengeluaranDialogFragment(
         dialog.window!!.requestFeature(Window.FEATURE_NO_TITLE)
         setCancelable(false)
         return dialog
-    }
-
-    @OnClick(R.id.btn_close)
-    fun onBtnCloseClicked() {
-        dismiss()
-    }
-
-    @OnClick(R.id.btn_send)
-    fun onBtnSendClicked() {
-        if (edtDesc.text.toString().isEmpty() || edtNominal.text.toString().isEmpty()) {
-            Toast.makeText(activity, "Data Tidak Boleh Kosong!", Toast.LENGTH_SHORT).show()
-        } else {
-            dismiss()
-            pengeluaranActivity.editPengeluaran(idPengeluaran, edtNominal.text.toString(), edtDesc.text.toString())
-        }
     }
 }

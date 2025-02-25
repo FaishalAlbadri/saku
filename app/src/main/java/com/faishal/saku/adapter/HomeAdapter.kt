@@ -3,19 +3,13 @@ package com.faishal.saku.adapter
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.faishal.saku.R
 import com.faishal.saku.data.catatan.CatatanItem
+import com.faishal.saku.databinding.ItemCatatanBinding
 import com.faishal.saku.ui.pengeluaran.PengeluaranActivity
 import com.faishal.saku.util.Util
-import org.jetbrains.annotations.NotNull
 
 
 class HomeAdapter : RecyclerView.Adapter<HomeAdapter.ViewHolder> {
@@ -28,82 +22,68 @@ class HomeAdapter : RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         this.context = context
     }
 
+    inner class ViewHolder(val binding: ItemCatatanBinding) : RecyclerView.ViewHolder(binding.root)
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_catatan, parent, false)
-        return ViewHolder(view)
+        val binding = ItemCatatanBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val dataCatatan: CatatanItem = listCatatan.get(position)
+        with(holder) {
+            binding.apply {
+                val dataCatatan: CatatanItem = listCatatan.get(position)
 
-        holder.txtDate.setText(dataCatatan.catatanWaktu)
-        holder.txtMoney.setText(
-            Util.pengeluarangaji(
-                dataCatatan.totalPengeluaran,
-                dataCatatan.catatanPendapatan
-            )
-        )
-        holder.txtPercent.setText(
-            Util.pengeluarangajipercent(
-                dataCatatan.totalPengeluaran,
-                dataCatatan.catatanPendapatan
-            )
-        )
+                txtDate.setText(dataCatatan.catatanWaktu)
+                txtMoney.setText(
+                    Util.pengeluarangaji(
+                        dataCatatan.totalPengeluaran,
+                        dataCatatan.catatanPendapatan
+                    )
+                )
+                txtPercent.setText(
+                    Util.pengeluarangajipercent(
+                        dataCatatan.totalPengeluaran,
+                        dataCatatan.catatanPendapatan
+                    )
+                )
 
-        if (dataCatatan.catatanWaktu!!.startsWith("Januari")) {
-            holder.btnCatatan.setBackgroundResource(R.drawable.card_1_jan)
-        } else if (dataCatatan.catatanWaktu!!.startsWith("Februari")) {
-            holder.btnCatatan.setBackgroundResource(R.drawable.card_2_feb)
-        } else if (dataCatatan.catatanWaktu!!.startsWith("Maret")) {
-            holder.btnCatatan.setBackgroundResource(R.drawable.card_3_mar)
-        } else if (dataCatatan.catatanWaktu!!.startsWith("April")) {
-            holder.btnCatatan.setBackgroundResource(R.drawable.card_4_apr)
-        } else if (dataCatatan.catatanWaktu!!.startsWith("Mei")) {
-            holder.btnCatatan.setBackgroundResource(R.drawable.card_5_mei)
-        } else if (dataCatatan.catatanWaktu!!.startsWith("Juni")) {
-            holder.btnCatatan.setBackgroundResource(R.drawable.card_6_jun)
-        } else if (dataCatatan.catatanWaktu!!.startsWith("Juli")) {
-            holder.btnCatatan.setBackgroundResource(R.drawable.card_7_jul)
-        } else if (dataCatatan.catatanWaktu!!.startsWith("Agustus")) {
-            holder.btnCatatan.setBackgroundResource(R.drawable.card_8_aug)
-        } else if (dataCatatan.catatanWaktu!!.startsWith("September")) {
-            holder.btnCatatan.setBackgroundResource(R.drawable.card_9_sept)
-        } else if (dataCatatan.catatanWaktu!!.startsWith("Oktober")) {
-            holder.btnCatatan.setBackgroundResource(R.drawable.card_10_okt)
-        } else if (dataCatatan.catatanWaktu!!.startsWith("November")) {
-            holder.btnCatatan.setBackgroundResource(R.drawable.card_11_nov)
-        } else if (dataCatatan.catatanWaktu!!.startsWith("Desember")) {
-            holder.btnCatatan.setBackgroundResource(R.drawable.card_12_des)
-        }
+                if (dataCatatan.catatanWaktu!!.startsWith("Januari")) {
+                    btnCatatan.setBackgroundResource(R.drawable.card_1_jan)
+                } else if (dataCatatan.catatanWaktu!!.startsWith("Februari")) {
+                    btnCatatan.setBackgroundResource(R.drawable.card_2_feb)
+                } else if (dataCatatan.catatanWaktu!!.startsWith("Maret")) {
+                    btnCatatan.setBackgroundResource(R.drawable.card_3_mar)
+                } else if (dataCatatan.catatanWaktu!!.startsWith("April")) {
+                    btnCatatan.setBackgroundResource(R.drawable.card_4_apr)
+                } else if (dataCatatan.catatanWaktu!!.startsWith("Mei")) {
+                    btnCatatan.setBackgroundResource(R.drawable.card_5_mei)
+                } else if (dataCatatan.catatanWaktu!!.startsWith("Juni")) {
+                    btnCatatan.setBackgroundResource(R.drawable.card_6_jun)
+                } else if (dataCatatan.catatanWaktu!!.startsWith("Juli")) {
+                    btnCatatan.setBackgroundResource(R.drawable.card_7_jul)
+                } else if (dataCatatan.catatanWaktu!!.startsWith("Agustus")) {
+                    btnCatatan.setBackgroundResource(R.drawable.card_8_aug)
+                } else if (dataCatatan.catatanWaktu!!.startsWith("September")) {
+                    btnCatatan.setBackgroundResource(R.drawable.card_9_sept)
+                } else if (dataCatatan.catatanWaktu!!.startsWith("Oktober")) {
+                    btnCatatan.setBackgroundResource(R.drawable.card_10_okt)
+                } else if (dataCatatan.catatanWaktu!!.startsWith("November")) {
+                    btnCatatan.setBackgroundResource(R.drawable.card_11_nov)
+                } else if (dataCatatan.catatanWaktu!!.startsWith("Desember")) {
+                    btnCatatan.setBackgroundResource(R.drawable.card_12_des)
+                }
 
-        holder.btnCatatan.setOnClickListener {
-            context.startActivity(Intent(context, PengeluaranActivity::class.java)
-                .putExtra("id_catatan", dataCatatan.idCatatan)
-                .putExtra("waktu", dataCatatan.catatanWaktu)
-            )
-        }
-
-
-    }
-
-    class ViewHolder(@NotNull itemView: View) : RecyclerView.ViewHolder(itemView) {
-        @BindView(R.id.txt_date)
-        lateinit var txtDate: TextView
-
-        @BindView(R.id.txt_money)
-        lateinit var txtMoney: TextView
-
-        @BindView(R.id.txt_percent)
-        lateinit var txtPercent: TextView
-
-        @BindView(R.id.btn_catatan)
-        lateinit var btnCatatan: ConstraintLayout
-
-        init {
-            ButterKnife.bind(this, itemView)
+                btnCatatan.setOnClickListener {
+                    context.startActivity(Intent(context, PengeluaranActivity::class.java)
+                        .putExtra("id_catatan", dataCatatan.idCatatan)
+                        .putExtra("waktu", dataCatatan.catatanWaktu)
+                    )
+                }
+            }
         }
     }
+
 
     override fun getItemCount(): Int {
         return listCatatan.size

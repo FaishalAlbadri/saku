@@ -9,9 +9,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.BitmapImageViewTarget
@@ -19,6 +16,7 @@ import com.faishal.saku.R
 import com.faishal.saku.api.Server
 import com.faishal.saku.base.BaseActivity
 import com.faishal.saku.data.user.UserItem
+import com.faishal.saku.databinding.ActivityProfileBinding
 import com.faishal.saku.di.LoginRepositoryInject
 import com.faishal.saku.presenter.login.LoginContract
 import com.faishal.saku.presenter.login.LoginPresenter
@@ -26,37 +24,18 @@ import com.faishal.saku.util.SessionManager
 
 class ProfileActivity : BaseActivity(), LoginContract.loginView {
 
-    @BindView(R.id.btn_back)
-    lateinit var btnBack: ImageView
-
-    @BindView(R.id.img_profile)
-    lateinit var imgProfile: ImageView
-
-    @BindView(R.id.btn_logout)
-    lateinit var btnLogout: TextView
-
-    @BindView(R.id.txt_name_value)
-    lateinit var txtNameValue: TextView
-
-    @BindView(R.id.txt_email_value)
-    lateinit var txtEmailValue: TextView
-
-    @BindView(R.id.txt_phone_value)
-    lateinit var txtPhoneValue: TextView
-
-    @BindView(R.id.txt_create_value)
-    lateinit var txtCreateValue: TextView
-
 
     private lateinit var sessionManager: SessionManager
     private lateinit var loginPresenter: LoginPresenter
     private lateinit var pd: ProgressDialog
 
+    private var _binding: ActivityProfileBinding? = null
+    val binding get() = _binding!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_profile)
-        ButterKnife.bind(this)
-
+        _binding = ActivityProfileBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setView()
     }
 
@@ -72,16 +51,38 @@ class ProfileActivity : BaseActivity(), LoginContract.loginView {
         pd.setCanceledOnTouchOutside(false)
         pd.setMessage("Loading")
         pd.show()
+
+        binding.apply {
+            btnLogout.setOnClickListener {
+                AlertDialog.Builder(this@ProfileActivity, R.style.AlertDialogTheme)
+                    .setTitle("Logout Akun")
+                    .setMessage("Yakinkah kamu ingin keluar dari akunmu?")
+                    .setPositiveButton("Logout") { dialogInterface, i ->
+                        sessionManager.logout()
+                    }
+                    .setNegativeButton("Batal") { dialogInterface, i ->
+                        dialogInterface.dismiss()
+                    }
+                    .show()
+            }
+
+            btnBack.setOnClickListener {
+                onBackPressed()
+            }
+        }
     }
 
     override fun onSuccessProfile(userItemList: List<UserItem>, msg: String) {
         val userItem = userItemList.get(0)
         pd.cancel()
-        txtNameValue.setText(userItem.userName)
-        txtEmailValue.setText(userItem.userEmail)
-        txtPhoneValue.setText(userItem.userPhone)
-        txtCreateValue.setText(userItem.userCreate)
-        imgProfile.loadCircularImage(Server.BASE_URL_IMG_USER + userItem.userImage, 8F)
+        binding.apply {
+            txtNameValue.setText(userItem.userName)
+            txtEmailValue.setText(userItem.userEmail)
+            txtPhoneValue.setText(userItem.userPhone)
+            txtCreateValue.setText(userItem.userCreate)
+            imgProfile.loadCircularImage(Server.BASE_URL_IMG_USER + userItem.userImage, 8F)
+
+        }
     }
 
     override fun onErrorProfile(msg: String) {
@@ -93,26 +94,6 @@ class ProfileActivity : BaseActivity(), LoginContract.loginView {
             pd.show()
             loginPresenter.profile(sessionManager.getIdUser()!!)
         }
-    }
-
-
-    @OnClick(R.id.btn_logout)
-    fun onBtnLogoutClicked() {
-        AlertDialog.Builder(this, R.style.AlertDialogTheme)
-            .setTitle("Logout Akun")
-            .setMessage("Yakinkah kamu ingin keluar dari akunmu?")
-            .setPositiveButton("Logout") { dialogInterface, i ->
-                sessionManager.logout()
-            }
-            .setNegativeButton("Batal") { dialogInterface, i ->
-                dialogInterface.dismiss()
-            }
-            .show()
-    }
-
-    @OnClick(R.id.btn_back)
-    fun onBtnBackClicked() {
-        onBackPressed()
     }
 
     override fun onBackPressed() {

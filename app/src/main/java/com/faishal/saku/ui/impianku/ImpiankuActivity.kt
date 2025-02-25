@@ -16,11 +16,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
 import com.faishal.saku.R
 import com.faishal.saku.adapter.ImpiankuFinishAdapter
 import com.faishal.saku.adapter.ImpiankuProgressAdapter
@@ -30,6 +25,7 @@ import com.faishal.saku.data.impianku.ImpiankuProgressItem
 import com.faishal.saku.data.impianku.detail.ImpiankuItem
 import com.faishal.saku.data.impianku.detail.PengeluaranHariItem
 import com.faishal.saku.data.scrapper.ScrapperItem
+import com.faishal.saku.databinding.ActivityImpiankuBinding
 import com.faishal.saku.di.ImpiankuRepositoryInject
 import com.faishal.saku.presenter.impianku.ImpiankuContract
 import com.faishal.saku.presenter.impianku.ImpiankuPresenter
@@ -42,48 +38,6 @@ import java.io.File
 
 
 class ImpiankuActivity : BaseActivity(), ImpiankuContract.impiankuView {
-
-    @BindView(R.id.btn_back)
-    lateinit var btnBack: ImageView
-
-    @BindView(R.id.btn_fab)
-    lateinit var btnFab: FloatingActionButton
-
-    @BindView(R.id.btn_add_manual)
-    lateinit var btnAddManual: FloatingActionButton
-
-    @BindView(R.id.btn_add_shopee)
-    lateinit var btnAddShopee: FloatingActionButton
-
-    @BindView(R.id.cv_add_manual)
-    lateinit var cvAddManual: CardView
-
-    @BindView(R.id.cv_add_shopee)
-    lateinit var cvAddShopee: CardView
-
-    @BindView(R.id.txt_total_value)
-    lateinit var txtTotalValue: TextView
-
-    @BindView(R.id.txt_onprogress_value)
-    lateinit var txtOnprogressValue: TextView
-
-    @BindView(R.id.txt_finished_value)
-    lateinit var txtFinishedValue: TextView
-
-    @BindView(R.id.rv_onproggres)
-    lateinit var rvProggres: RecyclerView
-
-    @BindView(R.id.rv_finished)
-    lateinit var rvFinished: RecyclerView
-
-    @BindView(R.id.layout_blank_onproggres)
-    lateinit var layoutBlankProggres: LinearLayout
-
-    @BindView(R.id.layout_blank_finished)
-    lateinit var layoutBlankFinished: LinearLayout
-
-    @BindView(R.id.refresh_impianku)
-    lateinit var refreshImpianku: SwipeRefreshLayout
 
     private lateinit var impiankuProgressAdapter: ImpiankuProgressAdapter
     private lateinit var impiankuFinishAdapter: ImpiankuFinishAdapter
@@ -107,10 +61,13 @@ class ImpiankuActivity : BaseActivity(), ImpiankuContract.impiankuView {
 
     private val STORAGE_PERMISSION_CODE = 123
 
+    private var _binding: ActivityImpiankuBinding? = null
+    val binding get() = _binding!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_impianku)
-        ButterKnife.bind(this)
+        _binding = ActivityImpiankuBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setView()
     }
@@ -124,8 +81,8 @@ class ImpiankuActivity : BaseActivity(), ImpiankuContract.impiankuView {
         pd.setMessage("Loading")
         pd.show()
 
-        Util.refreshColor(refreshImpianku)
-        refreshImpianku.setOnRefreshListener {
+        Util.refreshColor(binding.refreshImpianku)
+        binding.refreshImpianku.setOnRefreshListener {
             impiankuPresenter.impianku(sessionManager.getIdUser()!!)
         }
 
@@ -144,86 +101,81 @@ class ImpiankuActivity : BaseActivity(), ImpiankuContract.impiankuView {
         impiankuAddDialogFragment = ImpiankuAddDialogFragment.newInstance(this)
 
         impiankuProgressAdapter = ImpiankuProgressAdapter(this, impiankuProgressItem)
-        rvProggres.setLayoutManager(LinearLayoutManager(this))
-        rvProggres.setAdapter(impiankuProgressAdapter)
+        binding.rvOnproggres.setLayoutManager(LinearLayoutManager(this))
+        binding.rvOnproggres.setAdapter(impiankuProgressAdapter)
 
         impiankuFinishAdapter = ImpiankuFinishAdapter(this, impiankuFinishedItem)
-        rvFinished.setLayoutManager(LinearLayoutManager(this))
-        rvFinished.setAdapter(impiankuFinishAdapter)
+        binding.rvFinished.setLayoutManager(LinearLayoutManager(this))
+        binding.rvFinished.setAdapter(impiankuFinishAdapter)
 
         impiankuPresenter.impianku(sessionManager.getIdUser()!!)
-    }
 
-    @OnClick(R.id.btn_add_manual)
-    fun onBtnAddManualClicked() {
-        impiankuAddDialogFragment.show(fragmentManager, "")
-        hideFAB()
-    }
-
-    @OnClick(R.id.btn_add_shopee)
-    fun onBtnAddShopeeClicked() {
-        scrapperDialogFragment.show(fragmentManager, "")
-        hideFAB()
-    }
-
-    @OnClick(R.id.cv_add_manual)
-    fun onCvAddManualClicked() {
-        impiankuAddDialogFragment.show(fragmentManager, "")
-        hideFAB()
-    }
-
-    @OnClick(R.id.cv_add_shopee)
-    fun onCvAddShopeeClicked() {
-        scrapperDialogFragment.show(fragmentManager, "")
-        hideFAB()
-    }
-
-    @OnClick(R.id.btn_fab)
-    fun onBtnFabClicked() {
-        if (isOpen) {
-            hideFAB()
-        } else {
-            showFAB()
+        binding.apply {
+            btnAddManual.setOnClickListener {
+                impiankuAddDialogFragment.show(fragmentManager, "")
+                hideFAB()
+            }
+            btnAddShopee.setOnClickListener {
+                scrapperDialogFragment.show(fragmentManager, "")
+                hideFAB()
+            }
+            cvAddManual.setOnClickListener {
+                impiankuAddDialogFragment.show(fragmentManager, "")
+                hideFAB()
+            }
+            cvAddShopee.setOnClickListener {
+                scrapperDialogFragment.show(fragmentManager, "")
+                hideFAB()
+            }
+            btnFab.setOnClickListener {
+                if (isOpen) {
+                    hideFAB()
+                } else {
+                    showFAB()
+                }
+            }
+            btnBack.setOnClickListener {
+                onBackPressed()
+            }
         }
     }
 
     private fun showFAB() {
-        cvAddManual.setClickable(true)
-        cvAddShopee.setClickable(true)
-        btnAddManual.setClickable(true)
-        btnAddShopee.setClickable(true)
-        cvAddManual.setVisibility(View.VISIBLE)
-        cvAddShopee.setVisibility(View.VISIBLE)
-        btnAddManual.setVisibility(View.VISIBLE)
-        btnAddShopee.setVisibility(View.VISIBLE)
-        cvAddManual.startAnimation(fab_open)
-        cvAddShopee.startAnimation(fab_open)
-        btnAddManual.startAnimation(fab_open)
-        btnAddShopee.startAnimation(fab_open)
-        btnFab.startAnimation(fab_clock)
-        isOpen = true
+        binding.apply {
+            cvAddManual.setClickable(true)
+            cvAddShopee.setClickable(true)
+            btnAddManual.setClickable(true)
+            btnAddShopee.setClickable(true)
+            cvAddManual.setVisibility(View.VISIBLE)
+            cvAddShopee.setVisibility(View.VISIBLE)
+            btnAddManual.setVisibility(View.VISIBLE)
+            btnAddShopee.setVisibility(View.VISIBLE)
+            cvAddManual.startAnimation(fab_open)
+            cvAddShopee.startAnimation(fab_open)
+            btnAddManual.startAnimation(fab_open)
+            btnAddShopee.startAnimation(fab_open)
+            btnFab.startAnimation(fab_clock)
+            isOpen = true
+        }
     }
 
     private fun hideFAB() {
-        cvAddManual.setClickable(false)
-        cvAddShopee.setClickable(false)
-        btnAddManual.setClickable(false)
-        btnAddShopee.setClickable(false)
-        cvAddManual.setVisibility(View.GONE)
-        cvAddShopee.setVisibility(View.GONE)
-        btnAddManual.setVisibility(View.GONE)
-        btnAddShopee.setVisibility(View.GONE)
-        cvAddManual.startAnimation(fab_close)
-        cvAddShopee.startAnimation(fab_close)
-        btnAddManual.startAnimation(fab_close)
-        btnAddShopee.startAnimation(fab_close)
-        btnFab.startAnimation(fab_anticlock)
-        isOpen = false
-    }
-
-    @OnClick(R.id.btn_back)
-    fun onBtnBackClicked() {
-        onBackPressed()
+        binding.apply {
+            cvAddManual.setClickable(false)
+            cvAddShopee.setClickable(false)
+            btnAddManual.setClickable(false)
+            btnAddShopee.setClickable(false)
+            cvAddManual.setVisibility(View.GONE)
+            cvAddShopee.setVisibility(View.GONE)
+            btnAddManual.setVisibility(View.GONE)
+            btnAddShopee.setVisibility(View.GONE)
+            cvAddManual.startAnimation(fab_close)
+            cvAddShopee.startAnimation(fab_close)
+            btnAddManual.startAnimation(fab_close)
+            btnAddShopee.startAnimation(fab_close)
+            btnFab.startAnimation(fab_anticlock)
+            isOpen = false
+        }
     }
 
     override fun onSuccessGetImpianku(
@@ -231,44 +183,46 @@ class ImpiankuActivity : BaseActivity(), ImpiankuContract.impiankuView {
         finishedListItem: List<ImpiankuFinishedItem>,
         msg: String
     ) {
-        refreshImpianku.setRefreshing(false)
-        pd.dismiss()
-        val progressImpianku = progressListItem.size
-        val finishImpianku = finishedListItem.size
-        val total = progressImpianku + finishImpianku
-        txtTotalValue.setText(total.toString())
-        txtOnprogressValue.setText(progressImpianku.toString())
-        txtFinishedValue.setText(finishImpianku.toString())
+        binding.apply {
+            refreshImpianku.setRefreshing(false)
+            pd.dismiss()
+            val progressImpianku = progressListItem.size
+            val finishImpianku = finishedListItem.size
+            val total = progressImpianku + finishImpianku
+            txtTotalValue.setText(total.toString())
+            txtOnprogressValue.setText(progressImpianku.toString())
+            txtFinishedValue.setText(finishImpianku.toString())
 
-        if (progressImpianku > 0) {
-            rvProggres.visibility = View.VISIBLE
-            layoutBlankProggres.visibility = View.GONE
-        } else {
-            rvProggres.visibility = View.GONE
-            layoutBlankProggres.visibility = View.VISIBLE
+            if (progressImpianku > 0) {
+                rvOnproggres.visibility = View.VISIBLE
+                layoutBlankOnproggres.visibility = View.GONE
+            } else {
+                rvOnproggres.visibility = View.GONE
+                layoutBlankOnproggres.visibility = View.VISIBLE
+            }
+
+            if (finishImpianku > 0) {
+                rvFinished.visibility = View.VISIBLE
+                layoutBlankFinished.visibility = View.GONE
+            } else {
+                rvFinished.visibility = View.GONE
+                layoutBlankFinished.visibility = View.VISIBLE
+            }
+
+            impiankuProgressAdapter.delete()
+            impiankuProgressItem.clear()
+            impiankuProgressItem.addAll(progressListItem)
+            impiankuProgressAdapter.notifyDataSetChanged()
+
+            impiankuFinishAdapter.delete()
+            impiankuFinishedItem.clear()
+            impiankuFinishedItem.addAll(finishedListItem)
+            impiankuFinishAdapter.notifyDataSetChanged()
         }
-
-        if (finishImpianku > 0) {
-            rvFinished.visibility = View.VISIBLE
-            layoutBlankFinished.visibility = View.GONE
-        } else {
-            rvFinished.visibility = View.GONE
-            layoutBlankFinished.visibility = View.VISIBLE
-        }
-
-        impiankuProgressAdapter.delete()
-        impiankuProgressItem.clear()
-        impiankuProgressItem.addAll(progressListItem)
-        impiankuProgressAdapter.notifyDataSetChanged()
-
-        impiankuFinishAdapter.delete()
-        impiankuFinishedItem.clear()
-        impiankuFinishedItem.addAll(finishedListItem)
-        impiankuFinishAdapter.notifyDataSetChanged()
     }
 
     override fun onErrorGetImpianku(msg: String) {
-        refreshImpianku.setRefreshing(false)
+        binding.refreshImpianku.setRefreshing(false)
         pd.dismiss()
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }

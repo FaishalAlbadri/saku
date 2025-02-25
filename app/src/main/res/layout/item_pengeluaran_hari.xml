@@ -17,8 +17,7 @@
         android:drawableLeft="@drawable/ic_calender"
         android:drawableTint="@android:color/darker_gray"
         android:drawablePadding="4dp"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Kamis, 22 Januari 2022" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_pengeluaran"

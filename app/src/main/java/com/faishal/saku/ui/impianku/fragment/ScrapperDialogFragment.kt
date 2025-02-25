@@ -11,54 +11,16 @@ import android.view.Window
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.DialogFragment
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.faishal.saku.R
+import com.faishal.saku.databinding.FragmentScrapperDialogBinding
 import com.faishal.saku.ui.impianku.ImpiankuActivity
 import com.faishal.saku.util.Util
 import com.faishal.saku.util.Util.hideKeyboard
 import com.rengwuxian.materialedittext.MaterialEditText
 
 class ScrapperDialogFragment(impiankuActivity: ImpiankuActivity) : DialogFragment() {
-
-    @BindView(R.id.btn_close)
-    lateinit var btnClose: ImageView
-
-    @BindView(R.id.btn_send)
-    lateinit var btnSend: ImageView
-
-    @BindView(R.id.spinner_time)
-    lateinit var spinnerTime: Spinner
-
-    @BindView(R.id.edt_link_shopee)
-    lateinit var edtLinkShopee: MaterialEditText
-
-    @BindView(R.id.btn_generate)
-    lateinit var btnGenerate: LinearLayout
-
-    @BindView(R.id.layout_preview)
-    lateinit var layoutPreview: ConstraintLayout
-
-    @BindView(R.id.img_loading)
-    lateinit var imgLoading: ImageView
-
-    @BindView(R.id.img_produk)
-    lateinit var imgProduk: ImageView
-
-    @BindView(R.id.txt_harga)
-    lateinit var txtHarga: TextView
-
-    @BindView(R.id.txt_menabung_value)
-    lateinit var txtMenabungValue: TextView
-
-    @BindView(R.id.edt_nama_produk)
-    lateinit var edtNamaProduk: MaterialEditText
-
-    @BindView(R.id.edt_time)
-    lateinit var edtTime: MaterialEditText
 
     private val impiankuActivity: ImpiankuActivity = impiankuActivity
     private var xHari: Int = 1
@@ -72,84 +34,126 @@ class ScrapperDialogFragment(impiankuActivity: ImpiankuActivity) : DialogFragmen
         }
     }
 
+    private var _binding: FragmentScrapperDialogBinding? = null
+    val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val v: View = inflater.inflate(R.layout.fragment_scrapper_dialog, container, false)
-        ButterKnife.bind(this, v)
+        _binding = FragmentScrapperDialogBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         spinnerSet()
-
         setView()
-        return v
     }
 
     private fun setView() {
-        edtTime.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        binding.apply {
+            edtTime.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    if (!edtTime.text!!.toString().equals("")) {
+                        if (edtTime.text.toString().toInt() > 0) {
+                            val time = edtTime.text.toString()
+                            val hari = xHari
+                            val hargaPerHari = Math.ceil(hargaProduk.toDouble() / (time.toInt() * hari))
+                            txtMenabungValue.setText(Util.currencyRupiah(hargaPerHari.toInt()))
+                        }
+                    } else {
+                        txtMenabungValue.text = ""
+                    }
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+
+                }
+
+            })
+
+            btnClose.setOnClickListener {
+                clearData()
+                dismiss()
             }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (!edtTime.text!!.toString().equals("")) {
-                    if (edtTime.text.toString().toInt() > 0) {
-                        val time = edtTime.text.toString()
-                        val hari = xHari
-                        val hargaPerHari = Math.ceil(hargaProduk.toDouble() / (time.toInt() * hari))
-                        txtMenabungValue.setText(Util.currencyRupiah(hargaPerHari.toInt()))
-                    }
+            btnSend.setOnClickListener {
+                if (edtLinkShopee.text.toString().equals("") ||edtNamaProduk.text.toString().equals("") || edtTime.text.toString().equals("")) {
+                    Toast.makeText(activity, "Data ada yang masih kosong!", Toast.LENGTH_SHORT).show()
                 } else {
-                    txtMenabungValue.text = ""
+                    hideKeyboard()
+                    xHari  = xHari * edtTime.text.toString().toInt()
+                    impiankuActivity.addImpiankuShopee(edtNamaProduk.text.toString(), hargaProduk.toString(), image, xHari.toString(), linkshopee)
+                    clearData()
+                    dismiss()
                 }
             }
 
-            override fun afterTextChanged(s: Editable?) {
-
+            btnGenerate.setOnClickListener {
+                if (edtLinkShopee.text!!.isEmpty()) {
+                    edtLinkShopee.setError("Link Kosong")
+                    edtLinkShopee.requestFocus()
+                } else {
+                    hideKeyboard()
+                    linkshopee = edtLinkShopee.text.toString()
+                    imgLoading.setVisibility(View.VISIBLE)
+                    layoutPreview.setVisibility(View.GONE)
+                    edtTime.setText(null)
+                    edtTime.setError(null)
+                    edtTime.requestFocus()
+                    txtMenabungValue.setText("")
+                    txtHarga.setText("")
+                    spinnerTime.setSelection(0)
+                    impiankuActivity.loadScrapper(linkshopee)
+                }
             }
-
-        })
+        }
     }
 
     private fun spinnerSet() {
-        val timeStringArray = resources.getStringArray(R.array.time)
+        binding.apply {
+            val timeStringArray = resources.getStringArray(R.array.time)
 
-        Glide.with(this)
-            .load(R.raw.loading)
-            .into(imgLoading)
+            Glide.with(this@ScrapperDialogFragment)
+                .load(R.raw.loading)
+                .into(imgLoading)
 
-        spinnerTime.adapter = ArrayAdapter(
-            activity?.applicationContext!!,
-            android.R.layout.simple_spinner_dropdown_item,
-            timeStringArray
-        )
-        spinnerTime.setSelection(0)
+            spinnerTime.adapter = ArrayAdapter(
+                activity?.applicationContext!!,
+                android.R.layout.simple_spinner_dropdown_item,
+                timeStringArray
+            )
+            spinnerTime.setSelection(0)
 
-        spinnerTime.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                if (position == 1) {
-                    xHari = 7
-                } else if (position == 2) {
-                    xHari = 30
-                } else if (position == 3) {
-                    xHari = 365
-                } else {
-                    xHari = 1
+            spinnerTime.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    if (position == 1) {
+                        xHari = 7
+                    } else if (position == 2) {
+                        xHari = 30
+                    } else if (position == 3) {
+                        xHari = 365
+                    } else {
+                        xHari = 1
+                    }
+                    txtMenabungValue.setText("")
+                    edtTime.setText(null)
+                    edtTime.requestFocus()
                 }
-                txtMenabungValue.setText("")
-                edtTime.setText(null)
-                edtTime.requestFocus()
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                }
             }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
-
         }
     }
 
@@ -170,73 +174,38 @@ class ScrapperDialogFragment(impiankuActivity: ImpiankuActivity) : DialogFragmen
         return dialog
     }
 
-    @OnClick(R.id.btn_generate)
-    fun onBtnGenerateClicked() {
-        if (edtLinkShopee.text!!.isEmpty()) {
-            edtLinkShopee.setError("Link Kosong")
-            edtLinkShopee.requestFocus()
-        } else {
-            hideKeyboard()
-            linkshopee = edtLinkShopee.text.toString()
-            imgLoading.setVisibility(View.VISIBLE)
+    fun clearData() {
+        binding.apply {
             layoutPreview.setVisibility(View.GONE)
+            imgLoading.setVisibility(View.GONE)
+            edtLinkShopee.setText(null)
+            edtLinkShopee.setError(null)
+            edtLinkShopee.requestFocus()
             edtTime.setText(null)
             edtTime.setError(null)
             edtTime.requestFocus()
+            edtNamaProduk.setText(null)
+            edtNamaProduk.setError(null)
+            edtNamaProduk.requestFocus()
             txtMenabungValue.setText("")
             txtHarga.setText("")
             spinnerTime.setSelection(0)
-            impiankuActivity.loadScrapper(linkshopee)
         }
-    }
-
-    @OnClick(R.id.btn_send)
-    fun onBtnSendClicked() {
-        if (edtLinkShopee.text.toString().equals("") ||edtNamaProduk.text.toString().equals("") || edtTime.text.toString().equals("")) {
-            Toast.makeText(activity, "Data ada yang masih kosong!", Toast.LENGTH_SHORT).show()
-        } else {
-            hideKeyboard()
-            xHari  = xHari * edtTime.text.toString().toInt()
-            impiankuActivity.addImpiankuShopee(edtNamaProduk.text.toString(), hargaProduk.toString(), image, xHari.toString(), linkshopee)
-            clearData()
-            dismiss()
-        }
-    }
-
-    @OnClick(R.id.btn_close)
-    fun onBtnCloseClicked() {
-        clearData()
-        dismiss()
-    }
-
-    fun clearData() {
-        layoutPreview.setVisibility(View.GONE)
-        imgLoading.setVisibility(View.GONE)
-        edtLinkShopee.setText(null)
-        edtLinkShopee.setError(null)
-        edtLinkShopee.requestFocus()
-        edtTime.setText(null)
-        edtTime.setError(null)
-        edtTime.requestFocus()
-        edtNamaProduk.setText(null)
-        edtNamaProduk.setError(null)
-        edtNamaProduk.requestFocus()
-        txtMenabungValue.setText("")
-        txtHarga.setText("")
-        spinnerTime.setSelection(0)
     }
 
     fun onSuccesData(nama: String, harga: String, image: String) {
         this.image = image
-        layoutPreview.setVisibility(View.VISIBLE)
-        imgLoading.setVisibility(View.GONE)
-        Glide.with(this)
-            .load(image)
-            .apply(RequestOptions().centerCrop())
-            .into(imgProduk)
-        hargaProduk = harga.toInt()
-        txtHarga.setText(Util.currencyRupiah(harga))
-        edtNamaProduk.setText(nama)
+        binding.apply {
+            layoutPreview.setVisibility(View.VISIBLE)
+            imgLoading.setVisibility(View.GONE)
+            Glide.with(this@ScrapperDialogFragment)
+                .load(image)
+                .apply(RequestOptions().centerCrop())
+                .into(imgProduk)
+            hargaProduk = harga.toInt()
+            txtHarga.setText(Util.currencyRupiah(harga))
+            edtNamaProduk.setText(nama)
+        }
     }
 
 }

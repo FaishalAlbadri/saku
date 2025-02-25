@@ -1,16 +1,16 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
 }
 
 android {
-    compileSdk 32
+    namespace = "com.faishal.saku"
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.faishal.saku"
         minSdk 24
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -26,11 +26,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
     buildFeatures {
         viewBinding true
@@ -51,10 +51,6 @@ dependencies {
     //design
     implementation 'com.rengwuxian.materialedittext:library:2.1.4'
     implementation 'com.squareup.picasso:picasso:2.71828'
-
-    //butterknife
-    implementation 'com.jakewharton:butterknife:10.2.3'
-    kapt 'com.jakewharton:butterknife-compiler:10.2.3'
 
     //retrofit gson
     implementation('com.squareup.retrofit2:retrofit:2.3.0') {

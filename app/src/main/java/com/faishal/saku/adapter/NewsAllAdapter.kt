@@ -5,19 +5,14 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.faishal.saku.R
 import com.faishal.saku.api.Server
 import com.faishal.saku.data.news.NewsItem
+import com.faishal.saku.databinding.ItemNewsAllBinding
 import com.faishal.saku.ui.berita.BeritaDetailActivity
-import org.jetbrains.annotations.NotNull
 
 
 class NewsAllAdapter : RecyclerView.Adapter<NewsAllAdapter.ViewHolder> {
@@ -30,55 +25,38 @@ class NewsAllAdapter : RecyclerView.Adapter<NewsAllAdapter.ViewHolder> {
         this.context = context
     }
 
+    inner class ViewHolder(val binding: ItemNewsAllBinding) : RecyclerView.ViewHolder(binding.root)
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_news_all, parent, false)
-        return ViewHolder(view)
+        val binding = ItemNewsAllBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val dataNewsItem: NewsItem = listNews.get(position)
+        with(holder) {
+            binding.apply {
+                Glide.with(context)
+                    .load(Server.BASE_URL_IMG_NEWS + dataNewsItem.newsImg)
+                    .apply(RequestOptions().centerCrop())
+                    .into(imgNews)
 
-        Glide.with(context)
-            .load(Server.BASE_URL_IMG_NEWS + dataNewsItem.newsImg)
-            .apply(RequestOptions().centerCrop())
-            .into(holder.imgNews)
 
+                txtJudul.setText(dataNewsItem.newsJudul)
+                txtDesc.setText(dataNewsItem.newsDesc)
+                txtDate.setText(dataNewsItem.newsCreate)
 
-        holder.txtJudul.setText(dataNewsItem.newsJudul)
-        holder.txtDesc.setText(dataNewsItem.newsDesc)
-        holder.txtDate.setText(dataNewsItem.newsCreate)
-
-        holder.btnNews.setOnClickListener {
-            context.startActivity(
-                Intent(context, BeritaDetailActivity::class.java)
-                .putExtra("id", dataNewsItem.idNews)
-                .putExtra("judul", dataNewsItem.newsJudul)
-                .putExtra("desc", dataNewsItem.newsDesc)
-                .putExtra("img", dataNewsItem.newsImg)
-                .putExtra("date", dataNewsItem.newsCreate)
-            )
-        }
-    }
-
-    class ViewHolder(@NotNull itemView: View) : RecyclerView.ViewHolder(itemView) {
-        @BindView(R.id.img_news)
-        lateinit var imgNews: ImageView
-
-        @BindView(R.id.txt_date)
-        lateinit var txtDate: TextView
-
-        @BindView(R.id.txt_judul)
-        lateinit var txtJudul: TextView
-
-        @BindView(R.id.txt_desc)
-        lateinit var txtDesc: TextView
-
-        @BindView(R.id.btn_news)
-        lateinit var btnNews: ConstraintLayout
-
-        init {
-            ButterKnife.bind(this, itemView)
+                btnNews.setOnClickListener {
+                    context.startActivity(
+                        Intent(context, BeritaDetailActivity::class.java)
+                            .putExtra("id", dataNewsItem.idNews)
+                            .putExtra("judul", dataNewsItem.newsJudul)
+                            .putExtra("desc", dataNewsItem.newsDesc)
+                            .putExtra("img", dataNewsItem.newsImg)
+                            .putExtra("date", dataNewsItem.newsCreate)
+                    )
+                }
+            }
         }
     }
 

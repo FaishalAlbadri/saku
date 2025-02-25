@@ -37,8 +37,7 @@
                 android:paddingBottom="4dp"
                 android:textColor="@android:color/white"
                 android:textSize="12sp"
-                android:textStyle="bold"
-                tools:text="15:41" />
+                android:textStyle="bold" />
 
         </androidx.cardview.widget.CardView>
 
@@ -62,8 +61,7 @@
                 android:paddingBottom="4dp"
                 android:textColor="@android:color/white"
                 android:textSize="12sp"
-                android:textStyle="bold"
-                tools:text="Pokok" />
+                android:textStyle="bold"/>
 
         </androidx.cardview.widget.CardView>
 
@@ -90,8 +88,7 @@
                 android:paddingBottom="4dp"
                 android:textColor="@android:color/white"
                 android:textSize="12sp"
-                android:textStyle="bold"
-                tools:text="Makanan &amp; Minuman" />
+                android:textStyle="bold" />
 
         </androidx.cardview.widget.CardView>
 
@@ -117,8 +114,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/txt_harga"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/txt_harga"
-            app:layout_constraintTop_toTopOf="@+id/txt_harga"
-            tools:text="Jajan chiki di Indomaret" />
+            app:layout_constraintTop_toTopOf="@+id/txt_harga" />
 
         <TextView
             android:id="@+id/txt_harga"
@@ -130,8 +126,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cv_label_jam"
-            tools:text="Rp100.000" />
+            app:layout_constraintTop_toBottomOf="@+id/cv_label_jam"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

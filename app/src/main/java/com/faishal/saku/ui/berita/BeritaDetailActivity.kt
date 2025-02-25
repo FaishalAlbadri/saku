@@ -1,33 +1,14 @@
 package com.faishal.saku.ui.berita
 
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.TextView
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.faishal.saku.R
 import com.faishal.saku.api.Server
 import com.faishal.saku.base.BaseActivity
+import com.faishal.saku.databinding.ActivityBeritaDetailBinding
 
 class BeritaDetailActivity : BaseActivity() {
 
-    @BindView(R.id.btn_back)
-    lateinit var btnBack: ImageView
-
-    @BindView(R.id.img_news)
-    lateinit var imgNews: ImageView
-
-    @BindView(R.id.txt_date)
-    lateinit var txtDate: TextView
-
-    @BindView(R.id.txt_judul)
-    lateinit var txtJudul: TextView
-
-    @BindView(R.id.txt_desc)
-    lateinit var txtDesc: TextView
 
     private lateinit var id: String
     private lateinit var judul: String
@@ -35,11 +16,13 @@ class BeritaDetailActivity : BaseActivity() {
     private lateinit var img: String
     private lateinit var date: String
 
+    private var _binding: ActivityBeritaDetailBinding? = null
+    val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_berita_detail)
-        ButterKnife.bind(this)
+        _binding = ActivityBeritaDetailBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         getdata()
     }
@@ -54,16 +37,16 @@ class BeritaDetailActivity : BaseActivity() {
         Glide.with(this)
             .load(Server.BASE_URL_IMG_NEWS + img)
             .apply(RequestOptions().centerCrop())
-            .into(imgNews)
+            .into(binding.imgNews)
 
-        txtJudul.setText(judul)
-        txtDesc.setText(desc)
-        txtDate.setText(date)
-    }
+        binding.apply {
+            txtJudul.setText(judul)
+            txtDesc.setText(desc)
+            txtDate.setText(date)
 
-
-    @OnClick(R.id.btn_back)
-    fun onBtnBackClicked() {
-        onBackPressed()
+            btnBack.setOnClickListener {
+                onBackPressed()
+            }
+        }
     }
 }

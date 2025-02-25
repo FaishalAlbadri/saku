@@ -12,10 +12,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.faishal.saku.R
 import com.faishal.saku.data.pengeluaran.PengeluaranItem
+import com.faishal.saku.databinding.ItemPengeluaranBinding
 import com.faishal.saku.ui.pengeluaran.PengeluaranActivity
 import com.faishal.saku.util.Util
 import org.jetbrains.annotations.NotNull
@@ -30,100 +29,78 @@ class PengeluaranAdapter : RecyclerView.Adapter<PengeluaranAdapter.ViewHolder> {
         this.listItem = listItem
     }
 
+    inner class ViewHolder(val binding: ItemPengeluaranBinding) : RecyclerView.ViewHolder(binding.root)
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_pengeluaran, parent, false)
-        return ViewHolder(view)
+        val binding = ItemPengeluaranBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val dataPengeluaranItem: PengeluaranItem = listItem.get(position)
-        holder.labelJam.setText(dataPengeluaranItem.catatanItemCreate)
-        holder.labelDana.setText(dataPengeluaranItem.kategoriDanaNama)
+        with(holder) {
+            binding.apply {
+                labelJam.setText(dataPengeluaranItem.catatanItemCreate)
+                labelDana.setText(dataPengeluaranItem.kategoriDanaNama)
 
-        if (!dataPengeluaranItem.kategoriPokokNama.isEmpty()) {
-            holder.cvLabelDanaPokok.setVisibility(View.VISIBLE)
-            holder.labelDanaPokok.setText(dataPengeluaranItem.kategoriPokokNama)
-        } else {
-            holder.cvLabelDanaPokok.setVisibility(View.GONE)
-        }
+                if (!dataPengeluaranItem.kategoriPokokNama.isEmpty()) {
+                    cvLabelDanaPokok.setVisibility(View.VISIBLE)
+                    labelDanaPokok.setText(dataPengeluaranItem.kategoriPokokNama)
+                } else {
+                    cvLabelDanaPokok.setVisibility(View.GONE)
+                }
 
-        holder.txtJudul.setText(dataPengeluaranItem.catatanItemDesc)
-        holder.txtHarga.setText(Util.currencyRupiah(dataPengeluaranItem.catatanItemHarga))
+                txtJudul.setText(dataPengeluaranItem.catatanItemDesc)
+                txtHarga.setText(Util.currencyRupiah(dataPengeluaranItem.catatanItemHarga))
 
-        val popupMenu = PopupMenu(context, holder.btnMore)
-        popupMenu.inflate(R.menu.pengeluaran)
-        popupMenu.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
-            override fun onMenuItemClick(item: MenuItem): Boolean {
-                when (item.itemId) {
-                    R.id.edit -> {
-                        if (dataPengeluaranItem.idImpianku.equals("0")) {
-                            (context as PengeluaranActivity).showEditDialog(
-                                dataPengeluaranItem.idCatatanItem,
-                                dataPengeluaranItem.catatanItemHarga,
-                                dataPengeluaranItem.catatanItemDesc
-                            )
-                        } else {
-                            Toast.makeText(context, "Data tidak bisa di edit", Toast.LENGTH_SHORT).show()
+                val popupMenu = PopupMenu(context, btnMore)
+                popupMenu.inflate(R.menu.pengeluaran)
+                popupMenu.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
+                    override fun onMenuItemClick(item: MenuItem): Boolean {
+                        when (item.itemId) {
+                            R.id.edit -> {
+                                if (dataPengeluaranItem.idImpianku.equals("0")) {
+                                    (context as PengeluaranActivity).showEditDialog(
+                                        dataPengeluaranItem.idCatatanItem,
+                                        dataPengeluaranItem.catatanItemHarga,
+                                        dataPengeluaranItem.catatanItemDesc
+                                    )
+                                } else {
+                                    Toast.makeText(context, "Data tidak bisa di edit", Toast.LENGTH_SHORT).show()
+                                }
+                                return true
+                            }
+
+                            R.id.delete -> {
+                                if (dataPengeluaranItem.idImpianku.equals("0")) {
+                                    (context as PengeluaranActivity).showDeleteDialog(
+                                        dataPengeluaranItem.idCatatanItem,
+                                        dataPengeluaranItem.catatanItemDesc
+                                    )
+                                }else {
+                                    Toast.makeText(context, "Data tidak bisa di hapus", Toast.LENGTH_SHORT).show()
+                                }
+                                return true
+                            }
                         }
-                        return true
+                        return false
                     }
+                })
 
-                    R.id.delete -> {
-                        if (dataPengeluaranItem.idImpianku.equals("0")) {
-                            (context as PengeluaranActivity).showDeleteDialog(
-                                dataPengeluaranItem.idCatatanItem,
-                                dataPengeluaranItem.catatanItemDesc
-                            )
-                        }else {
-                            Toast.makeText(context, "Data tidak bisa di hapus", Toast.LENGTH_SHORT).show()
-                        }
-                        return true
+                btnMore.setOnClickListener {
+                    try {
+                        val fieldMPopup = PopupMenu::class.java.getDeclaredField("mPopup")
+                        fieldMPopup.isAccessible = true
+                        val mPopup = fieldMPopup.get(popupMenu)
+                        mPopup.javaClass.getDeclaredMethod("setForceShowIcon", Boolean::class.java)
+                            .invoke(mPopup, true)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    } finally {
+                        popupMenu.show()
                     }
                 }
-                return false
             }
-        })
-
-        holder.btnMore.setOnClickListener {
-            try {
-                val fieldMPopup = PopupMenu::class.java.getDeclaredField("mPopup")
-                fieldMPopup.isAccessible = true
-                val mPopup = fieldMPopup.get(popupMenu)
-                mPopup.javaClass.getDeclaredMethod("setForceShowIcon", Boolean::class.java)
-                    .invoke(mPopup, true)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            } finally {
-                popupMenu.show()
-            }
-        }
-    }
-
-    class ViewHolder(@NotNull itemView: View) : RecyclerView.ViewHolder(itemView) {
-        @BindView(R.id.label_jam)
-        lateinit var labelJam: TextView
-
-        @BindView(R.id.label_dana)
-        lateinit var labelDana: TextView
-
-        @BindView(R.id.label_dana_pokok)
-        lateinit var labelDanaPokok: TextView
-
-        @BindView(R.id.cv_label_dana_pokok)
-        lateinit var cvLabelDanaPokok: CardView
-
-        @BindView(R.id.btn_more)
-        lateinit var btnMore: ImageView
-
-        @BindView(R.id.txt_judul)
-        lateinit var txtJudul: TextView
-
-        @BindView(R.id.txt_harga)
-        lateinit var txtHarga: TextView
-
-        init {
-            ButterKnife.bind(this, itemView)
         }
     }
 
